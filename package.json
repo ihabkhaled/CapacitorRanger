@@ -56,7 +56,7 @@
     "knowledge:packs": "node scripts/knowledge/cli.mjs build --packs-only",
     "knowledge:benchmark": "node scripts/knowledge/cli.mjs benchmark",
     "knowledge:report": "node scripts/knowledge/cli.mjs report",
-    "cap:sync": "npm run build && cap sync",
+    "cap:sync": "npm run build && cap sync && node scripts/native/normalize-native-paths.mjs",
     "cap:sync:check": "node scripts/native/check-capacitor-sync.mjs",
     "cap:open:android": "cap open android",
     "cap:open:ios": "cap open ios",

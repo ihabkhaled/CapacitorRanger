@@ -26,10 +26,32 @@ if (javaProbe.error !== undefined) {
   process.exit(1);
 }
 
-const command = process.platform === 'win32' ? 'gradlew.bat' : './gradlew';
+const isWindows = process.platform === 'win32';
+const command = isWindows ? 'gradlew.bat' : './gradlew';
 const result = spawnSync(command, [task], {
   cwd: 'android',
   stdio: 'inherit',
-  shell: process.platform === 'win32',
+  shell: isWindows,
 });
-process.exit(result.status ?? 1);
+
+// spawnSync reports a failure to START the process through `error`, leaving
+// status null. Without this branch the runner exits 1 printing nothing, which
+// is indistinguishable from a Gradle task failure and impossible to debug from
+// a CI log. The usual cause is android/gradlew missing its executable bit.
+if (result.error !== undefined) {
+  console.error(`Failed to start "${command} ${task}": ${result.error.message}`);
+  if (!isWindows) {
+    console.error(
+      'If this is EACCES, android/gradlew is not executable. Fix it in git with:\n' +
+        '  git update-index --chmod=+x android/gradlew',
+    );
+  }
+  process.exit(1);
+}
+
+if (result.status === null) {
+  console.error(`"${command} ${task}" was terminated by signal ${String(result.signal)}.`);
+  process.exit(1);
+}
+
+process.exit(result.status);

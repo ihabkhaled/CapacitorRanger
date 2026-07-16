@@ -185,11 +185,9 @@ jobs:
   visual:
     name: Visual regression
     runs-on: ubuntu-latest
-    # Snapshots are platform-specific. Baselines committed from a developer
-    # machine will not match Linux rendering, so this job regenerates and
-    # compares within a single run: it guards against in-PR drift, not against
-    # the committed baselines. See docs/operations/ci.md.
-    continue-on-error: true
+    # Baselines are platform-specific: Playwright names them per OS. The
+    # committed *-linux.png files are generated in the Playwright container that
+    # matches this runner (see docs/operations/ci.md), so this is a real gate.
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -254,7 +252,7 @@ jobs:
       - run: npm ci
       - run: npm run security:audit
       - name: Trivy vulnerability, secret, and misconfiguration scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
           scanners: vuln,secret,misconfig
@@ -328,6 +326,7 @@ jobs:
       - build
       - e2e
       - accessibility
+      - visual
       - static-analysis
       - architecture-gates
       - security

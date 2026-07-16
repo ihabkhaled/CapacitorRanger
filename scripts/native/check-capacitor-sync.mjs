@@ -37,6 +37,20 @@ if (appId !== null && existsSync('ios/App/App.xcodeproj/project.pbxproj')) {
   }
 }
 
+// A Windows-generated Package.swift carries backslash paths, which are not
+// separators on macOS and are string escapes in Swift. Catch it by name rather
+// than only as drift, so the failure says what is actually wrong.
+const spmManifest = 'ios/App/CapApp-SPM/Package.swift';
+if (existsSync(spmManifest)) {
+  const manifest = readFileSync(spmManifest, 'utf8');
+  if (/path:\s*"[^"]*\\/u.test(manifest)) {
+    problems.push(
+      `${spmManifest} contains Windows path separators. Run "npm run cap:sync" ` +
+        '(which normalizes them) and commit the result.',
+    );
+  }
+}
+
 const nativeDiff = execSync('git status --porcelain -- android ios', { encoding: 'utf8' }).trim();
 if (nativeDiff !== '') {
   problems.push(`native tree drifted after sync:\n${nativeDiff}`);

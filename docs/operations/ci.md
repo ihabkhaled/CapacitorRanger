@@ -17,7 +17,7 @@
 | `build`               | Production build.                                                                                                                           |
 | `e2e`                 | Playwright: desktop, mobile emulation, Arabic RTL.                                                                                          |
 | `accessibility`       | axe, WCAG 2.2 AA, light + dark + RTL.                                                                                                       |
-| `visual`              | Screenshot diffs (see the caveat below).                                                                                                    |
+| `visual`              | Screenshot diffs against container-generated Linux baselines.                                                                               |
 | `static-analysis`     | Dead code (knip), cycles (madge), duplication (jscpd).                                                                                      |
 | `architecture-gates`  | Structure, ownership, exports, filenames, locales, docs, agent entrypoints.                                                                 |
 | `security`            | `npm audit` + Trivy (vuln, secret, misconfig).                                                                                              |
@@ -34,21 +34,31 @@ cannot be mistaken for a pass.
 The `knowledge` job regenerates `.ai` and then runs `git diff --exit-code -- .ai`. If you changed a
 rule or ADR without rebuilding, this fails. Fix: `npm run knowledge:build`, then commit.
 
-## Visual regression caveat (read before trusting it)
+## Visual regression baselines
 
-Screenshot baselines are **platform-specific**. Playwright names them `*-win32.png`,
-`*-linux.png`, etc. Baselines committed from a Windows or macOS workstation will not match Linux
-rendering in CI — different font rasterization, not a real regression.
+Screenshot baselines are **platform-specific**: Playwright names them `welcome-light-visual-linux.png`,
+`…-win32.png`, and so on. A baseline recorded on Windows will never match Linux rendering — the font
+rasterization differs — so committing only Windows baselines would leave the CI job permanently red
+for an environmental reason. That trains people to ignore red, which is worse than having no gate.
 
-The `visual` job is therefore `continue-on-error: true`. It surfaces diffs as artifacts without
-blocking. Pick one before relying on it as a gate:
+Both sets are therefore committed, and the `linux` ones are generated in the **same container image
+the runner uses**:
 
-1. **Generate Linux baselines in a container** matching CI, commit them, and drop
-   `continue-on-error`. This is the correct fix.
-2. Run visual tests only locally as a review aid.
+```bash
+docker run --rm -v "$PWD:/w" -w /w -e CI=true \
+  mcr.microsoft.com/playwright:v1.61.1-noble \
+  bash -c 'npm ci && npx playwright test tests/visual --update-snapshots'
+```
 
-This is documented rather than hidden because a gate that fails for environmental reasons trains
-people to ignore red — which costs more than having no gate.
+Keep the image tag in step with the `@playwright/test` version in `package.json`; a mismatched
+browser build renders differently and will produce false diffs.
+
+Note that `npm ci` inside the container replaces `node_modules/` with Linux binaries. Re-run
+`npm ci` on your workstation afterwards.
+
+Because the baselines match the runner, the job is a **real gate** — no `continue-on-error`. A red
+visual job means the UI changed: review the diff artifact, then either fix the regression or
+regenerate the baselines with the command above and commit them.
 
 ## Artifacts on failure
 
