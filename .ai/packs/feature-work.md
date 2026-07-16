@@ -4,10 +4,10 @@
 
 Read in order:
 
-- rules/01-architecture-and-dependency-direction.md (missing — create it)
-- rules/02-feature-modules.md (missing — create it)
-- rules/03-components.md (missing — create it)
-- rules/05-hooks-and-effects.md (missing — create it)
-- skills/new-feature-module.md (missing — create it)
-- context/architecture-map.md (missing — create it)
-- context/module-anatomy.md (missing — create it)
+- rules/01-architecture-and-dependency-direction.md
+- rules/02-feature-modules.md
+- rules/03-components.md
+- rules/05-hooks-and-effects.md
+- skills/new-feature-module.md
+- context/architecture-map.md
+- context/module-anatomy.md

@@ -4,10 +4,10 @@
 
 Read in order:
 
-- rules/18-security.md (missing — create it)
-- rules/12-routing-and-deep-links.md (missing — create it)
+- rules/18-security.md
+- rules/12-routing-and-deep-links.md
 - skills/secure-storage.md (missing — create it)
 - skills/security-review.md (missing — create it)
-- context/auth-flow.md (missing — create it)
-- docs/security/token-storage.md (missing — create it)
-- architecture/adrs/0010-secure-token-storage.md (missing — create it)
+- context/auth-flow.md
+- docs/security/token-storage.md
+- architecture/adrs/0010-secure-token-storage.md

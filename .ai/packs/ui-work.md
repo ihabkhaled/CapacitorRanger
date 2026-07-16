@@ -4,9 +4,9 @@
 
 Read in order:
 
-- rules/03-components.md (missing — create it)
-- rules/04-containers.md (missing — create it)
-- rules/19-accessibility.md (missing — create it)
-- rules/21-i18n-rtl.md (missing — create it)
-- skills/component.md (missing — create it)
-- context/state-ownership-map.md (missing — create it)
+- rules/03-components.md
+- rules/04-containers.md
+- rules/19-accessibility.md
+- rules/21-i18n-rtl.md
+- skills/component.md
+- context/state-ownership-map.md

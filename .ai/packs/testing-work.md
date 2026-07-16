@@ -4,9 +4,9 @@
 
 Read in order:
 
-- rules/22-testing-and-coverage.md (missing — create it)
+- rules/22-testing-and-coverage.md
 - skills/unit-test.md (missing — create it)
 - skills/integration-test.md (missing — create it)
 - skills/playwright-test.md (missing — create it)
-- context/test-strategy-map.md (missing — create it)
+- context/test-strategy-map.md
 - testing/README.md (missing — create it)

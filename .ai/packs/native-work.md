@@ -4,10 +4,10 @@
 
 Read in order:
 
-- rules/11-capacitor-native-boundaries.md (missing — create it)
-- rules/26-native-release-readiness.md (missing — create it)
+- rules/11-capacitor-native-boundaries.md
+- rules/26-native-release-readiness.md
 - skills/capacitor-plugin.md (missing — create it)
 - skills/native-listener.md (missing — create it)
-- context/native-capability-map.md (missing — create it)
-- docs/native/android-runbook.md (missing — create it)
-- memory/native-pitfalls.md (missing — create it)
+- context/native-capability-map.md
+- docs/native/android-runbook.md
+- memory/native-pitfalls.md
