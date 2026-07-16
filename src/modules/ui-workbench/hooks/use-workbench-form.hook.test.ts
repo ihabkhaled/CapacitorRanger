@@ -3,26 +3,13 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { I18N_KEYS } from '@/shared/i18n';
 
+import { buildSubmitEvent, flushAsyncWork } from '../../../../tests/setup/form-test.helper';
 import { useWorkbenchForm, type WorkbenchFormView } from './use-workbench-form.hook';
 
 const VALID = { name: 'Ranger', email: 'ranger@example.com' };
 
 function translate(key: string): string {
   return `translated(${key})`;
-}
-
-function buildSubmitEvent(): React.SyntheticEvent<HTMLFormElement> {
-  return {
-    preventDefault: () => undefined,
-    persist: () => undefined,
-  } as unknown as React.SyntheticEvent<HTMLFormElement>;
-}
-
-/** Let the form's async schema resolver settle inside the act() window. */
-function flushAsyncWork(): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 0);
-  });
 }
 
 function renderForm(

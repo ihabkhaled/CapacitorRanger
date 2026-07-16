@@ -71,3 +71,22 @@ one: it means a plugin was added without committing the native changes it genera
 and `ios/` projects already contain the old id in `build.gradle` and `project.pbxproj`. Changing the
 constant without regenerating the native projects fails `cap:sync:check` with a mismatch. That
 failure is the feature.
+
+## `cap sync` on Windows corrupts the SPM manifest
+
+Capacitor's CLI writes local package paths with the **host** separator, so a sync run on Windows
+emits Swift like:
+
+```swift
+.package(name: "CapacitorApp", path: "..\..\..\node_modules\@capacitor\app")
+```
+
+Backslashes are not path separators on macOS, and `\a`/`\n`/`\.` are string escapes in Swift, so a
+committed manifest in that state breaks the iOS build for everyone and makes `cap:sync:check` fail
+forever on POSIX CI. The macOS CI job hides it, because it re-syncs before building.
+
+Always sync through **`npm run cap:sync`**, which chains
+`scripts/native/normalize-native-paths.mjs` and rewrites the paths to POSIX. A bare `npx cap sync`
+on Windows reintroduces the corruption; `npm run cap:sync:check` then names it explicitly rather
+than reporting anonymous drift. Both the normalizer and the check are idempotent no-ops on macOS
+and Linux.

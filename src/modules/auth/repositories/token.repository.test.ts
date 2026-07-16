@@ -5,19 +5,10 @@ import { STORAGE_KEYS } from '@/shared/config';
 
 import { createAuthTokenRepository, getAuthTokenRepository } from './token.repository';
 
-vi.mock('@/packages/secure-storage', () => {
-  const values = new Map<string, string>();
-  return {
-    getSecureValue: vi.fn((key: string) => Promise.resolve(values.get(key) ?? null)),
-    setSecureValue: vi.fn((key: string, value: string) => {
-      values.set(key, value);
-      return Promise.resolve();
-    }),
-    removeSecureValue: vi.fn((key: string) => {
-      values.delete(key);
-      return Promise.resolve();
-    }),
-  };
+vi.mock('@/packages/secure-storage', async () => {
+  const { createSecureStorageDouble } =
+    await import('../../../../tests/setup/secure-storage-double.helper');
+  return createSecureStorageDouble();
 });
 
 const TOKENS = { accessToken: 'access-1', refreshToken: 'refresh-1' };

@@ -3,24 +3,11 @@ import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { translateNow } from '@/packages/i18n';
 
+import { buildSubmitEvent, flushAsyncWork } from '../../../../tests/setup/form-test.helper';
 import { initTestI18n } from '../../../../tests/setup/i18n-test.helper';
 import { useLoginForm, type LoginFormView } from './use-login-form.hook';
 
 const VALID = { email: 'ranger@example.com', password: 'Sup3rSecret!' };
-
-function buildSubmitEvent(): React.SyntheticEvent<HTMLFormElement> {
-  return {
-    preventDefault: () => undefined,
-    persist: () => undefined,
-  } as unknown as React.SyntheticEvent<HTMLFormElement>;
-}
-
-/** Let the form's async schema resolver settle inside the act() window. */
-function flushAsyncWork(): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 0);
-  });
-}
 
 function renderLoginForm(onValidSubmit = vi.fn()): {
   readonly current: () => LoginFormView;

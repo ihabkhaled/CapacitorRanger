@@ -7,8 +7,10 @@ import { schemaBuilder, type SchemaOutput } from '@/packages/schema';
 import { useAppFormField } from './use-app-form-field.hook';
 import { useAppForm } from './use-app-form.hook';
 
+const NAME_REQUIRED_KEY = 'workbench.formValidationNameRequired';
+
 const workbenchFormSchema = schemaBuilder.object({
-  name: schemaBuilder.string().min(1, 'workbench.formValidationNameRequired'),
+  name: schemaBuilder.string().min(1, NAME_REQUIRED_KEY),
   attempts: schemaBuilder.number(),
 });
 
@@ -22,6 +24,15 @@ function renderWorkbenchForm(fieldName: FieldPath<WorkbenchForm> = 'name') {
     });
     const field = useAppFormField<WorkbenchForm>({ control: form.control, name: fieldName });
     return { form, field };
+  });
+}
+
+type WorkbenchFormHarness = ReturnType<typeof renderWorkbenchForm>['result'];
+
+/** Touch the field without entering a value so the schema's required rule fires. */
+function touchEmptyField(result: WorkbenchFormHarness): void {
+  act(() => {
+    result.current.field.onBlur();
   });
 }
 
@@ -42,7 +53,7 @@ describe('useAppForm', () => {
 
     expect(onValid).not.toHaveBeenCalled();
     await vi.waitFor(() => {
-      expect(result.current.field.errorMessage).toBe('workbench.formValidationNameRequired');
+      expect(result.current.field.errorMessage).toBe(NAME_REQUIRED_KEY);
     });
   });
 
@@ -70,12 +81,10 @@ describe('useAppForm', () => {
 
     expect(result.current.field.errorMessage).toBeUndefined();
 
-    act(() => {
-      result.current.field.onBlur();
-    });
+    touchEmptyField(result);
 
     await vi.waitFor(() => {
-      expect(result.current.field.errorMessage).toBe('workbench.formValidationNameRequired');
+      expect(result.current.field.errorMessage).toBe(NAME_REQUIRED_KEY);
     });
   });
 });
@@ -103,23 +112,18 @@ describe('useAppFormField', () => {
   it('surfaces the schema message as a translation key', async () => {
     const { result } = renderWorkbenchForm();
 
-    act(() => {
-      result.current.field.onBlur();
-    });
+    touchEmptyField(result);
 
     await vi.waitFor(() => {
-      expect(result.current.field.errorMessage).toBe('workbench.formValidationNameRequired');
+      expect(result.current.field.errorMessage).toBe(NAME_REQUIRED_KEY);
     });
   });
 
   it('clears the error once the value satisfies the schema', async () => {
     const { result } = renderWorkbenchForm();
-
-    act(() => {
-      result.current.field.onBlur();
-    });
+    touchEmptyField(result);
     await vi.waitFor(() => {
-      expect(result.current.field.errorMessage).toBe('workbench.formValidationNameRequired');
+      expect(result.current.field.errorMessage).toBe(NAME_REQUIRED_KEY);
     });
 
     act(() => {

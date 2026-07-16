@@ -4,6 +4,7 @@ import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 import { APP_ERROR_CODE } from '@/shared/errors';
 import { AppError } from '@/shared/errors/app.errors';
 
+import { buildSubmitEvent, flushAsyncWork } from '../../../../tests/setup/form-test.helper';
 import { initTestI18n } from '../../../../tests/setup/i18n-test.helper';
 import { useLoginMutation, type LoginMutationView } from '../mutations/use-login-mutation.hook';
 import { useLoginScreen } from './use-login-screen.hook';
@@ -11,20 +12,6 @@ import { useLoginScreen } from './use-login-screen.hook';
 vi.mock('../mutations/use-login-mutation.hook', () => ({ useLoginMutation: vi.fn() }));
 
 const VALID = { email: 'ranger@example.com', password: 'Sup3rSecret!' };
-
-function buildSubmitEvent(): React.SyntheticEvent<HTMLFormElement> {
-  return {
-    preventDefault: () => undefined,
-    persist: () => undefined,
-  } as unknown as React.SyntheticEvent<HTMLFormElement>;
-}
-
-/** Let the form's async schema resolver settle inside the act() window. */
-function flushAsyncWork(): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 0);
-  });
-}
 
 function mockLoginMutation(overrides: Partial<LoginMutationView> = {}): LoginMutationView['login'] {
   const login = vi.fn();

@@ -1,28 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
-import {
-  configureAppHttpClient,
-  createHttpClient,
-  createTestAdapter,
-  resetAppHttpClientForTesting,
-  type TestRoute,
-} from '@/packages/http';
+import { resetAppHttpClientForTesting } from '@/packages/http';
 
-import { buildTokenPair, createMemoryTokenStore } from '../../../../tests/factories/http.factory';
+import { installTestAppHttpClient } from '../../../../tests/factories/http.factory';
 import { HEALTH_API_PATHS } from '../constants/health-api.constants';
 import { requestHealth } from './health.gateway';
 
 const HEALTH_DTO = { status: 'ok', version: '1.4.2', timestamp: '2026-07-16T10:15:00.000Z' };
-
-function wireClient(routes: readonly TestRoute[]): void {
-  configureAppHttpClient(
-    createHttpClient({
-      config: { baseUrl: 'http://api.test/api/v1', timeoutMs: 1000 },
-      tokenStore: createMemoryTokenStore(buildTokenPair()),
-      adapter: createTestAdapter(routes),
-    }),
-  );
-}
 
 afterEach(() => {
   resetAppHttpClientForTesting();
@@ -30,7 +14,7 @@ afterEach(() => {
 
 describe('requestHealth', () => {
   it('gets the health endpoint and returns the parsed payload', async () => {
-    wireClient([
+    installTestAppHttpClient([
       {
         method: 'GET',
         url: HEALTH_API_PATHS.health,
@@ -43,7 +27,7 @@ describe('requestHealth', () => {
 
   it('never attaches a bearer token: health is a public probe', async () => {
     let seenHeaders: Record<string, unknown> = {};
-    wireClient([
+    installTestAppHttpClient([
       {
         method: 'GET',
         url: HEALTH_API_PATHS.health,
@@ -61,7 +45,7 @@ describe('requestHealth', () => {
   });
 
   it('rejects a payload that violates the wire contract', async () => {
-    wireClient([
+    installTestAppHttpClient([
       {
         method: 'GET',
         url: HEALTH_API_PATHS.health,

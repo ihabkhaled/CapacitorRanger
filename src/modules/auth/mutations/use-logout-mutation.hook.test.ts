@@ -42,37 +42,32 @@ describe('useLogoutMutation', () => {
     });
   });
 
-  it('drops cached server state and marks the session anonymous', async () => {
-    vi.mocked(logoutUser).mockResolvedValue();
-    const queryClient = createTestQueryClient();
-    queryClient.setQueryData(authQueryKeys.currentUser(), buildAuthUser());
+  // Logging out is local-first: the cache and session must clear whichever way
+  // the server call lands, so both outcomes drive the identical expectations.
+  it.each([
+    ['the server acknowledges', (): void => void vi.mocked(logoutUser).mockResolvedValue()],
+    [
+      'the server call fails',
+      (): void => void vi.mocked(logoutUser).mockRejectedValue(new Error('offline')),
+    ],
+  ])(
+    'drops cached server state and marks the session anonymous when %s',
+    async (_label, arrange) => {
+      arrange();
+      const queryClient = createTestQueryClient();
+      queryClient.setQueryData(authQueryKeys.currentUser(), buildAuthUser());
 
-    const { result } = renderHookWithProviders(() => useLogoutMutation(), { queryClient });
-    act(() => {
-      result.current.logout();
-    });
+      const { result } = renderHookWithProviders(() => useLogoutMutation(), { queryClient });
+      act(() => {
+        result.current.logout();
+      });
 
-    await waitFor(() => {
-      expect(useSessionStore.getState().status).toBe(SESSION_STATUS.Anonymous);
-    });
-    expect(queryClient.getQueryData(authQueryKeys.currentUser())).toBeUndefined();
-  });
-
-  it('still clears the cache and the session when logout fails', async () => {
-    vi.mocked(logoutUser).mockRejectedValue(new Error('offline'));
-    const queryClient = createTestQueryClient();
-    queryClient.setQueryData(authQueryKeys.currentUser(), buildAuthUser());
-
-    const { result } = renderHookWithProviders(() => useLogoutMutation(), { queryClient });
-    act(() => {
-      result.current.logout();
-    });
-
-    await waitFor(() => {
-      expect(useSessionStore.getState().status).toBe(SESSION_STATUS.Anonymous);
-    });
-    expect(queryClient.getQueryData(authQueryKeys.currentUser())).toBeUndefined();
-  });
+      await waitFor(() => {
+        expect(useSessionStore.getState().status).toBe(SESSION_STATUS.Anonymous);
+      });
+      expect(queryClient.getQueryData(authQueryKeys.currentUser())).toBeUndefined();
+    },
+  );
 
   it('reports the in-flight state while logging out', async () => {
     let resolveLogout: () => void = () => undefined;

@@ -1,51 +1,26 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { trackEvent } from '@/packages/analytics';
-import {
-  configureAppHttpClient,
-  createHttpClient,
-  createTestAdapter,
-  resetAppHttpClientForTesting,
-  type TestRoute,
-} from '@/packages/http';
+import { resetAppHttpClientForTesting, type TestRoute } from '@/packages/http';
 import { getSecureValue } from '@/packages/secure-storage';
 import { STORAGE_KEYS } from '@/shared/config';
 import { APP_ERROR_CODE } from '@/shared/errors';
 import { AppError } from '@/shared/errors/app.errors';
 
-import { buildTokenPair, createMemoryTokenStore } from '../../../../tests/factories/http.factory';
+import { installTestAppHttpClient } from '../../../../tests/factories/http.factory';
 import { AUTH_ANALYTICS_EVENTS } from '../constants/auth-analytics.constants';
 import { AUTH_API_PATHS } from '../constants/auth-api.constants';
 import { loginUser } from './login.service';
 
 vi.mock('@/packages/analytics', () => ({ trackEvent: vi.fn() }));
 
-vi.mock('@/packages/secure-storage', () => {
-  const values = new Map<string, string>();
-  return {
-    getSecureValue: vi.fn((key: string) => Promise.resolve(values.get(key) ?? null)),
-    setSecureValue: vi.fn((key: string, value: string) => {
-      values.set(key, value);
-      return Promise.resolve();
-    }),
-    removeSecureValue: vi.fn((key: string) => {
-      values.delete(key);
-      return Promise.resolve();
-    }),
-  };
+vi.mock('@/packages/secure-storage', async () => {
+  const { createSecureStorageDouble } =
+    await import('../../../../tests/setup/secure-storage-double.helper');
+  return createSecureStorageDouble();
 });
 
 const CREDENTIALS = { email: 'ranger@example.com', password: 'Sup3rSecret!' };
-
-function wireClient(routes: readonly TestRoute[]): void {
-  configureAppHttpClient(
-    createHttpClient({
-      config: { baseUrl: 'http://api.test/api/v1', timeoutMs: 1000 },
-      tokenStore: createMemoryTokenStore(buildTokenPair()),
-      adapter: createTestAdapter(routes),
-    }),
-  );
-}
 
 function loginRoute(status: number, data: unknown): TestRoute {
   return { method: 'POST', url: AUTH_API_PATHS.login, respond: () => ({ status, data }) };
@@ -64,7 +39,7 @@ afterEach(() => {
 
 describe('loginUser', () => {
   it('returns the mapped session on success', async () => {
-    wireClient([
+    installTestAppHttpClient([
       loginRoute(200, {
         tokens: { accessToken: 'access-9', refreshToken: 'refresh-9' },
         user: { id: 'user-1', email: 'Ranger@Example.com', displayName: ' Ranger One ' },
@@ -80,7 +55,7 @@ describe('loginUser', () => {
   });
 
   it('persists the issued pair in secure storage', async () => {
-    wireClient([
+    installTestAppHttpClient([
       loginRoute(200, {
         tokens: { accessToken: 'access-9', refreshToken: 'refresh-9' },
         user: { id: 'user-1', email: 'ranger@example.com', displayName: 'Ranger One' },
@@ -94,7 +69,7 @@ describe('loginUser', () => {
   });
 
   it('tracks the login-succeeded event once', async () => {
-    wireClient([
+    installTestAppHttpClient([
       loginRoute(200, {
         tokens: { accessToken: 'access-9', refreshToken: 'refresh-9' },
         user: { id: 'user-1', email: 'ranger@example.com', displayName: 'Ranger One' },
@@ -107,7 +82,7 @@ describe('loginUser', () => {
   });
 
   it('maps a 401 to the invalid-credentials code', async () => {
-    wireClient([loginRoute(401, { statusCode: 401, code: 'INVALID_CREDENTIALS' })]);
+    installTestAppHttpClient([loginRoute(401, { statusCode: 401, code: 'INVALID_CREDENTIALS' })]);
 
     const failure = await loginFailure();
 
@@ -116,7 +91,7 @@ describe('loginUser', () => {
   });
 
   it('never tracks a login event when authentication fails', async () => {
-    wireClient([loginRoute(401, { statusCode: 401 })]);
+    installTestAppHttpClient([loginRoute(401, { statusCode: 401 })]);
 
     await loginFailure();
 
@@ -124,7 +99,7 @@ describe('loginUser', () => {
   });
 
   it('maps a 500 through the shared HTTP error mapper', async () => {
-    wireClient([loginRoute(500, { statusCode: 500 })]);
+    installTestAppHttpClient([loginRoute(500, { statusCode: 500 })]);
 
     const failure = await loginFailure();
 
@@ -133,7 +108,7 @@ describe('loginUser', () => {
   });
 
   it('preserves the request id and field errors from a validation envelope', async () => {
-    wireClient([
+    installTestAppHttpClient([
       loginRoute(400, {
         statusCode: 400,
         code: 'VALIDATION_ERROR',

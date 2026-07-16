@@ -1,47 +1,22 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { trackEvent } from '@/packages/analytics';
-import {
-  configureAppHttpClient,
-  createHttpClient,
-  createTestAdapter,
-  resetAppHttpClientForTesting,
-  type TestRoute,
-} from '@/packages/http';
+import { resetAppHttpClientForTesting, type TestRoute } from '@/packages/http';
 import { getSecureValue, setSecureValue } from '@/packages/secure-storage';
 import { STORAGE_KEYS } from '@/shared/config';
 
-import { buildTokenPair, createMemoryTokenStore } from '../../../../tests/factories/http.factory';
+import { installTestAppHttpClient } from '../../../../tests/factories/http.factory';
 import { AUTH_ANALYTICS_EVENTS } from '../constants/auth-analytics.constants';
 import { AUTH_API_PATHS } from '../constants/auth-api.constants';
 import { logoutUser } from './logout.service';
 
 vi.mock('@/packages/analytics', () => ({ trackEvent: vi.fn() }));
 
-vi.mock('@/packages/secure-storage', () => {
-  const values = new Map<string, string>();
-  return {
-    getSecureValue: vi.fn((key: string) => Promise.resolve(values.get(key) ?? null)),
-    setSecureValue: vi.fn((key: string, value: string) => {
-      values.set(key, value);
-      return Promise.resolve();
-    }),
-    removeSecureValue: vi.fn((key: string) => {
-      values.delete(key);
-      return Promise.resolve();
-    }),
-  };
+vi.mock('@/packages/secure-storage', async () => {
+  const { createSecureStorageDouble } =
+    await import('../../../../tests/setup/secure-storage-double.helper');
+  return createSecureStorageDouble();
 });
-
-function wireClient(routes: readonly TestRoute[]): void {
-  configureAppHttpClient(
-    createHttpClient({
-      config: { baseUrl: 'http://api.test/api/v1', timeoutMs: 1000 },
-      tokenStore: createMemoryTokenStore(buildTokenPair()),
-      adapter: createTestAdapter(routes),
-    }),
-  );
-}
 
 function logoutRoute(status: number, data: unknown): TestRoute {
   return { method: 'POST', url: AUTH_API_PATHS.logout, respond: () => ({ status, data }) };
@@ -59,7 +34,7 @@ afterEach(() => {
 
 describe('logoutUser', () => {
   it('clears the stored tokens after the server acknowledges', async () => {
-    wireClient([logoutRoute(200, { success: true })]);
+    installTestAppHttpClient([logoutRoute(200, { success: true })]);
 
     await logoutUser();
 
@@ -68,7 +43,7 @@ describe('logoutUser', () => {
   });
 
   it('still clears the stored tokens when the server logout fails', async () => {
-    wireClient([logoutRoute(500, { statusCode: 500 })]);
+    installTestAppHttpClient([logoutRoute(500, { statusCode: 500 })]);
 
     await expect(logoutUser()).resolves.toBeUndefined();
 
@@ -84,7 +59,7 @@ describe('logoutUser', () => {
   });
 
   it('tracks the logout-completed event on the happy path', async () => {
-    wireClient([logoutRoute(200, { success: true })]);
+    installTestAppHttpClient([logoutRoute(200, { success: true })]);
 
     await logoutUser();
 
@@ -92,7 +67,7 @@ describe('logoutUser', () => {
   });
 
   it('tracks the logout-completed event even when the server call fails', async () => {
-    wireClient([logoutRoute(500, { statusCode: 500 })]);
+    installTestAppHttpClient([logoutRoute(500, { statusCode: 500 })]);
 
     await logoutUser();
 

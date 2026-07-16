@@ -6,30 +6,42 @@ import { AppError } from '@/shared/errors/app.errors';
 
 import { mapHttpErrorToAppError } from './http-app-error.mapper';
 
-const EXPECTED_CODE: Record<HttpErrorKind, AppErrorCode> = {
-  [HTTP_ERROR_KIND.Network]: APP_ERROR_CODE.NetworkOffline,
-  [HTTP_ERROR_KIND.Timeout]: APP_ERROR_CODE.Timeout,
-  [HTTP_ERROR_KIND.Cancelled]: APP_ERROR_CODE.Unexpected,
-  [HTTP_ERROR_KIND.Unauthorized]: APP_ERROR_CODE.Unauthorized,
-  [HTTP_ERROR_KIND.Forbidden]: APP_ERROR_CODE.Forbidden,
-  [HTTP_ERROR_KIND.NotFound]: APP_ERROR_CODE.NotFound,
-  [HTTP_ERROR_KIND.RateLimited]: APP_ERROR_CODE.RateLimited,
-  [HTTP_ERROR_KIND.Validation]: APP_ERROR_CODE.Validation,
-  [HTTP_ERROR_KIND.Server]: APP_ERROR_CODE.Server,
-  [HTTP_ERROR_KIND.ResponseContract]: APP_ERROR_CODE.Unexpected,
-  [HTTP_ERROR_KIND.Unexpected]: APP_ERROR_CODE.Unexpected,
-};
+/**
+ * The app code each transport kind must surface, stated case by case rather
+ * than derived from the mapper, so a changed mapping fails a named test here.
+ * Kinds the user can neither see nor act on (a cancelled request, a broken
+ * response contract) deliberately collapse onto Unexpected.
+ */
+const KIND_EXPECTATIONS: [HttpErrorKind, AppErrorCode][] = [
+  [HTTP_ERROR_KIND.Network, APP_ERROR_CODE.NetworkOffline],
+  [HTTP_ERROR_KIND.Timeout, APP_ERROR_CODE.Timeout],
+  [HTTP_ERROR_KIND.Cancelled, APP_ERROR_CODE.Unexpected],
+  [HTTP_ERROR_KIND.Unauthorized, APP_ERROR_CODE.Unauthorized],
+  [HTTP_ERROR_KIND.Forbidden, APP_ERROR_CODE.Forbidden],
+  [HTTP_ERROR_KIND.NotFound, APP_ERROR_CODE.NotFound],
+  [HTTP_ERROR_KIND.RateLimited, APP_ERROR_CODE.RateLimited],
+  [HTTP_ERROR_KIND.Validation, APP_ERROR_CODE.Validation],
+  [HTTP_ERROR_KIND.Server, APP_ERROR_CODE.Server],
+  [HTTP_ERROR_KIND.ResponseContract, APP_ERROR_CODE.Unexpected],
+  [HTTP_ERROR_KIND.Unexpected, APP_ERROR_CODE.Unexpected],
+];
 
 describe('mapHttpErrorToAppError', () => {
-  it.each(Object.values(HTTP_ERROR_KIND))('maps the %s transport kind to its app code', (kind) => {
+  it.each(KIND_EXPECTATIONS)('surfaces the %s transport kind as %s', (kind, expectedCode) => {
     const httpError = new HttpError({ kind, message: 'transport failed' });
 
     const appError = mapHttpErrorToAppError(httpError);
 
     expect(appError).toBeInstanceOf(AppError);
-    expect(appError.code).toBe(EXPECTED_CODE[kind]);
+    expect(appError.code).toBe(expectedCode);
     expect(appError.message).toBe('transport failed');
     expect(appError.cause).toBe(httpError);
+  });
+
+  it('pins an expectation for every kind the transport can raise', () => {
+    const covered = KIND_EXPECTATIONS.map(([kind]) => kind);
+
+    expect(covered.toSorted()).toEqual(Object.values(HTTP_ERROR_KIND).toSorted());
   });
 
   it('carries the request id and field errors to the UI layer', () => {

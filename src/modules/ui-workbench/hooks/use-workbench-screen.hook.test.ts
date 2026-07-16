@@ -4,6 +4,7 @@ import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vite
 import type * as SharedUiModule from '@/shared/ui';
 import { useAppToast } from '@/shared/ui';
 
+import { buildSubmitEvent, flushAsyncWork } from '../../../../tests/setup/form-test.helper';
 import { initTestI18n } from '../../../../tests/setup/i18n-test.helper';
 import { WORKBENCH_LIST_SIZE } from '../constants/workbench.constants';
 import { useWorkbenchScreen, type WorkbenchScreenView } from './use-workbench-screen.hook';
@@ -16,20 +17,6 @@ vi.mock('@/shared/ui', async (importOriginal) => ({
 const VALID = { name: 'Ranger', email: 'ranger@example.com' };
 
 const showToast = vi.fn<() => Promise<void>>();
-
-function buildSubmitEvent(): React.SyntheticEvent<HTMLFormElement> {
-  return {
-    preventDefault: () => undefined,
-    persist: () => undefined,
-  } as unknown as React.SyntheticEvent<HTMLFormElement>;
-}
-
-/** Let the form's async schema resolver settle inside the act() window. */
-function flushAsyncWork(): Promise<void> {
-  return new Promise((resolve) => {
-    setTimeout(resolve, 0);
-  });
-}
 
 async function submitValidForm(result: { current: WorkbenchScreenView }): Promise<void> {
   act(() => {

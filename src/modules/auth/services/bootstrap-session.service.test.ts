@@ -7,19 +7,10 @@ import { useSessionStore } from '../store/session.store';
 import { SESSION_STATUS } from '../types/auth.types';
 import { bootstrapSessionFromStoredTokens } from './bootstrap-session.service';
 
-vi.mock('@/packages/secure-storage', () => {
-  const values = new Map<string, string>();
-  return {
-    getSecureValue: vi.fn((key: string) => Promise.resolve(values.get(key) ?? null)),
-    setSecureValue: vi.fn((key: string, value: string) => {
-      values.set(key, value);
-      return Promise.resolve();
-    }),
-    removeSecureValue: vi.fn((key: string) => {
-      values.delete(key);
-      return Promise.resolve();
-    }),
-  };
+vi.mock('@/packages/secure-storage', async () => {
+  const { createSecureStorageDouble } =
+    await import('../../../../tests/setup/secure-storage-double.helper');
+  return createSecureStorageDouble();
 });
 
 beforeEach(async () => {

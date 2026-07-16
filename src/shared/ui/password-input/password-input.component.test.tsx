@@ -5,26 +5,33 @@ import { describe, expect, it, vi } from 'vitest';
 import { fireIonBlur, fireIonInput } from '../../../../tests/setup/ionic-events.helper';
 import { AppPasswordInput } from './password-input.component';
 import { PASSWORD_HIDE_ICON, PASSWORD_REVEAL_ICON } from './password-input.constants';
+import type { AppPasswordInputProps } from './password-input.types';
 
 function getToggleIcon(): Element {
   return document.body.querySelector('ion-icon')!;
 }
 
+/** Render the input with a masked, empty, error-free baseline; override per case. */
+function renderPasswordInput(overrides: Partial<AppPasswordInputProps> = {}): void {
+  render(
+    <AppPasswordInput
+      label="Password"
+      name="password"
+      value=""
+      revealed={false}
+      onValueChange={vi.fn()}
+      onToggleReveal={vi.fn()}
+      revealLabel="Show password"
+      hideLabel="Hide password"
+      testId="password-input"
+      {...overrides}
+    />,
+  );
+}
+
 describe('AppPasswordInput', () => {
   it('masks the value and offers the reveal affordance when not revealed', () => {
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value="secret"
-        revealed={false}
-        onValueChange={vi.fn()}
-        onToggleReveal={vi.fn()}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput({ value: 'secret' });
 
     const input = screen.getByTestId('password-input');
     expect(input).toHaveAttribute('type', 'password');
@@ -35,19 +42,7 @@ describe('AppPasswordInput', () => {
   });
 
   it('shows the value and offers the hide affordance when revealed', () => {
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value="secret"
-        revealed
-        onValueChange={vi.fn()}
-        onToggleReveal={vi.fn()}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput({ value: 'secret', revealed: true });
 
     expect(screen.getByTestId('password-input')).toHaveAttribute('type', 'text');
     expect(screen.getByLabelText('Hide password')).toBeInTheDocument();
@@ -57,19 +52,7 @@ describe('AppPasswordInput', () => {
 
   it('calls onToggleReveal when the reveal button is clicked', async () => {
     const onToggleReveal = vi.fn();
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value="secret"
-        revealed={false}
-        onValueChange={vi.fn()}
-        onToggleReveal={onToggleReveal}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput({ value: 'secret', onToggleReveal });
 
     await userEvent.click(screen.getByLabelText('Show password'));
 
@@ -79,20 +62,7 @@ describe('AppPasswordInput', () => {
   it('reports extracted values through onValueChange and blurs through onBlur', () => {
     const onValueChange = vi.fn();
     const onBlur = vi.fn();
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value=""
-        revealed={false}
-        onValueChange={onValueChange}
-        onBlur={onBlur}
-        onToggleReveal={vi.fn()}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput({ onValueChange, onBlur });
 
     fireIonInput(screen.getByTestId('password-input'), 'hunter2');
     fireIonBlur(screen.getByTestId('password-input'));
@@ -103,19 +73,7 @@ describe('AppPasswordInput', () => {
 
   it('stays inert on ionBlur when no onBlur handler is provided', () => {
     const onValueChange = vi.fn();
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value=""
-        revealed={false}
-        onValueChange={onValueChange}
-        onToggleReveal={vi.fn()}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput({ onValueChange });
 
     fireIonBlur(screen.getByTestId('password-input'));
 
@@ -123,57 +81,19 @@ describe('AppPasswordInput', () => {
   });
 
   it('applies the placeholder when one is provided', () => {
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value=""
-        placeholder="Your password"
-        revealed={false}
-        onValueChange={vi.fn()}
-        onToggleReveal={vi.fn()}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput({ placeholder: 'Your password' });
 
     expect(screen.getByTestId('password-input')).toHaveAttribute('placeholder', 'Your password');
   });
 
   it('omits the placeholder when none is provided', () => {
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value=""
-        revealed={false}
-        onValueChange={vi.fn()}
-        onToggleReveal={vi.fn()}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput();
 
     expect(screen.getByTestId('password-input')).not.toHaveAttribute('placeholder');
   });
 
   it('surfaces the error message and marks the field invalid', () => {
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value=""
-        errorMessage="Password is required"
-        revealed={false}
-        onValueChange={vi.fn()}
-        onToggleReveal={vi.fn()}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput({ errorMessage: 'Password is required' });
 
     const input = screen.getByTestId('password-input');
     expect(input).toHaveProperty('errorText', 'Password is required');
@@ -181,19 +101,7 @@ describe('AppPasswordInput', () => {
   });
 
   it('leaves the field valid when no error message is provided', () => {
-    render(
-      <AppPasswordInput
-        label="Password"
-        name="password"
-        value=""
-        revealed={false}
-        onValueChange={vi.fn()}
-        onToggleReveal={vi.fn()}
-        revealLabel="Show password"
-        hideLabel="Hide password"
-        testId="password-input"
-      />,
-    );
+    renderPasswordInput();
 
     expect(screen.getByTestId('password-input')).not.toHaveClass('ion-invalid');
   });

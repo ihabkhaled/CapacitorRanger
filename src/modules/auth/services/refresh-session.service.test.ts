@@ -1,26 +1,10 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
-import {
-  configureAppHttpClient,
-  createHttpClient,
-  createTestAdapter,
-  resetAppHttpClientForTesting,
-  type TestRoute,
-} from '@/packages/http';
+import { resetAppHttpClientForTesting } from '@/packages/http';
 
-import { buildTokenPair, createMemoryTokenStore } from '../../../../tests/factories/http.factory';
+import { installTestAppHttpClient } from '../../../../tests/factories/http.factory';
 import { AUTH_API_PATHS } from '../constants/auth-api.constants';
 import { createRefreshExecutor } from './refresh-session.service';
-
-function wireClient(routes: readonly TestRoute[]): void {
-  configureAppHttpClient(
-    createHttpClient({
-      config: { baseUrl: 'http://api.test/api/v1', timeoutMs: 1000 },
-      tokenStore: createMemoryTokenStore(buildTokenPair()),
-      adapter: createTestAdapter(routes),
-    }),
-  );
-}
 
 afterEach(() => {
   resetAppHttpClientForTesting();
@@ -28,7 +12,7 @@ afterEach(() => {
 
 describe('createRefreshExecutor', () => {
   it('exchanges a refresh token for the rotated pair', async () => {
-    wireClient([
+    installTestAppHttpClient([
       {
         method: 'POST',
         url: AUTH_API_PATHS.refresh,
@@ -47,7 +31,7 @@ describe('createRefreshExecutor', () => {
 
   it('sends the caller-supplied refresh token in the request body', async () => {
     let seenBody: unknown;
-    wireClient([
+    installTestAppHttpClient([
       {
         method: 'POST',
         url: AUTH_API_PATHS.refresh,
@@ -67,7 +51,7 @@ describe('createRefreshExecutor', () => {
   });
 
   it('maps only the token pair, dropping any extra wire fields', async () => {
-    wireClient([
+    installTestAppHttpClient([
       {
         method: 'POST',
         url: AUTH_API_PATHS.refresh,
@@ -87,7 +71,7 @@ describe('createRefreshExecutor', () => {
   });
 
   it('rejects when the refresh endpoint refuses the token', async () => {
-    wireClient([
+    installTestAppHttpClient([
       {
         method: 'POST',
         url: AUTH_API_PATHS.refresh,
