@@ -8,6 +8,7 @@ import { getEnvironment } from '@/packages/environment';
 import { initErrorReporting } from '@/packages/error-reporting';
 import { configureAppHttpClient, createHttpClient } from '@/packages/http';
 import { initI18n } from '@/packages/i18n';
+import { setupIonicReact } from '@/packages/ionic';
 import { getPlatformLogger } from '@/platform';
 import { API_MODE } from '@/shared/enums';
 
@@ -28,6 +29,10 @@ async function startMockModeIfEnabled(): Promise<void> {
  * reporting, mock mode, and the initial session snapshot — in that order.
  */
 export async function startApp(): Promise<void> {
+  // Must run before any Ionic component renders: it installs the Ionic
+  // config and component styles. Without it components mount unstyled and
+  // controlled values never reach their properties.
+  setupIonicReact();
   const environment = getEnvironment();
   await initI18n({
     resources: buildI18nResources(),
