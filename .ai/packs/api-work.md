@@ -6,8 +6,8 @@ Read in order:
 
 - rules/13-http-and-nest-api.md
 - rules/17-error-handling.md
-- skills/axios-endpoint.md (missing — create it)
-- skills/nest-dto-integration.md (missing — create it)
+- skills/axios-endpoint.md
+- skills/nest-dto-integration.md
 - context/api-flow.md
 - docs/api/nest-error-contract.md
 - architecture/adrs/0007-axios-nest-api-boundary.md
