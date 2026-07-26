@@ -33,12 +33,12 @@ hook or a policy decision in a component.
 ```bash
 npm run quality:architecture       # layer direction + module structure, re-derived
 npm run quality:package-ownership  # registry completeness + owner-dir existence
-npm run quality:circular           # madge: import cycles
+npm run quality:circular           # dependency-cruiser: import cycles
 npm run quality:exports            # index.ts is a re-export surface only
 npm run lint
 ```
 
-A madge cycle is almost always a boundary the design got wrong — a finding, not a warning.
+A dependency-cruiser cycle is almost always a boundary the design got wrong — a finding, not a warning.
 
 ## What it defers to
 

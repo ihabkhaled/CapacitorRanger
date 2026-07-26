@@ -24,7 +24,7 @@ An ADR is not a tutorial. It explains _why_ the boundary exists. The
 | [0008](./0008-tanstack-query-server-state-ownership.md) | Remote data belongs to TanStack Query                          | `no-inline-query-keys`, `no-server-state-in-client-store`     |
 | [0009](./0009-zustand-client-state-ownership.md)        | Client-global state is Zustand: preferences + session status   | `no-server-state-in-client-store`, `no-inline-storage-keys`   |
 | [0010](./0010-secure-token-storage.md)                  | Tokens live in secure storage only, via one repository         | `no-direct-storage-api-outside-platform`, `security:secrets`  |
-| [0011](./0011-typescript-7-toolchain-compatibility.md)  | TS 7.0.2 compiles; TS 5.9.3 exists only for the lint parser    | `typecheck`, `check-toolchain-compatibility.mjs`              |
+| [0011](./0011-typescript-7-toolchain-compatibility.md)  | TS 7.0.2 compiles; TS 6.0.2 exists only for the lint parser    | `typecheck`, `check-toolchain-compatibility.mjs`              |
 | [0012](./0012-error-normalization.md)                   | Axios error → `HttpError` → `AppError` → i18n key → copy       | `no-unsafe-error-display`, `quality:locales`                  |
 | [0013](./0013-boundary-validation.md)                   | Parse every untrusted boundary with Zod at the edge            | `no-import-meta-env-outside-environment`, pure-file coverage  |
 | [0014](./0014-testing-and-per-file-coverage.md)         | Per-file thresholds; four Vitest projects                      | `test:coverage:per-file`                                      |

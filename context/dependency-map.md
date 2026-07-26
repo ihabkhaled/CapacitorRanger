@@ -66,5 +66,5 @@ recorded in `memory/package-upgrade-notes.md`:
   exact peer.
 - `eslint-plugin-react` and `eslint-plugin-jsx-a11y` still declare ESLint `<=9` peers, so
   `package.json` carries an `overrides` block mapping their `eslint` peer to `$eslint`.
-- `typescript7` is an npm alias for the primary compiler; plain `typescript` exists only for the
+- `@typescript/native` is an npm alias for the primary compiler; plain `typescript` exists only for the
   lint parser ([ADR 0011](../architecture/adrs/0011-typescript-7-toolchain-compatibility.md)).

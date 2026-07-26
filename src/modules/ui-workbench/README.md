@@ -12,6 +12,8 @@ the virtualized list, on one route.
 ## What it demonstrates
 
 - **Buttons** — every tone through `AppButton`.
+- **Surfaces** — reusable `AppCard` spacing and tones around each catalogue section.
+- **Field foundations** — `AppInput`, `AppPasswordInput`, and `AppSelect` from `@/shared/ui`.
 - **Form** — React Hook Form + Zod through `@/packages/forms`, messages as i18n keys.
 - **States** — loading, empty, error (with retry), offline, permission.
 - **Virtualized list** — 500 items through the `@/packages/virtual-list` owner facade; Virtuoso is

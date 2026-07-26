@@ -1,5 +1,4 @@
-import { render, screen } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { fireEvent, render, screen } from '@testing-library/react';
 import { describe, expect, it, vi } from 'vitest';
 
 import type { FormFieldBinding } from '@/packages/forms';
@@ -123,11 +122,11 @@ describe('WorkbenchForm', () => {
     expect(result).toHaveAttribute('role', 'status');
   });
 
-  it('submits through the injected handler', async () => {
+  it('submits through the injected handler', () => {
     const props = buildProps();
     renderForm(props);
 
-    await userEvent.click(screen.getByTestId(WORKBENCH_FORM_TEST_IDS.submit));
+    fireEvent.submit(screen.getByTestId(WORKBENCH_FORM_TEST_IDS.submit));
 
     expect(props.onSubmit).toHaveBeenCalledOnce();
   });

@@ -14,7 +14,7 @@ export function AppButton(props: AppButtonProps): React.JSX.Element {
       {...(props.expand === true ? { expand: 'block' as const } : {})}
       onClick={props.onClick}
       aria-busy={props.loading === true ? 'true' : undefined}
-      className="min-h-11"
+      className="app-button min-h-11"
     >
       {props.loading === true ? (
         <IonSpinner slot="start" name="crescent" aria-hidden="true" />

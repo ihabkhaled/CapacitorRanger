@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import process from 'node:process';
 
 const packageJson = JSON.parse(readFileSync('package.json', 'utf8'));
-const primaryAlias = packageJson.devDependencies?.typescript7 ?? '';
+const primaryAlias = packageJson.devDependencies?.['@typescript/native'] ?? '';
 const primaryMajor = Number(/npm:typescript@(\d+)/u.exec(primaryAlias)?.[1] ?? 'NaN');
 
 const parserPackage = JSON.parse(
@@ -18,7 +18,7 @@ const upperBound = /<\s*(\d+)/u.exec(peerRange);
 const supportsPrimary = upperBound === null ? true : Number(upperBound[1]) > primaryMajor;
 
 if (Number.isNaN(primaryMajor)) {
-  console.log('No typescript7 compatibility alias found; single-compiler setup.');
+  console.log('No @typescript/native compatibility alias found; single-compiler setup.');
   process.exit(0);
 }
 
@@ -26,8 +26,8 @@ if (supportsPrimary) {
   console.error(
     `typescript-eslint now declares TypeScript peer range "${peerRange}", which covers ` +
       `the primary compiler (v${String(primaryMajor)}). Remove the dual-compiler arrangement: ` +
-      'drop the "typescript" 5.x devDependency, point "typescript" at v7, delete the ' +
-      '"typescript7" alias, and update ADR-0011 + docs/dependencies/typescript-compatibility.md.',
+      'drop the TypeScript 6 compatibility alias, point "typescript" at v7, delete the ' +
+      '"@typescript/native" alias, and update ADR-0011 + the compatibility docs.',
   );
   process.exit(1);
 }

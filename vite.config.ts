@@ -1,10 +1,12 @@
 import tailwindcss from '@tailwindcss/vite';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vite';
-import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), tsconfigPaths()],
+  plugins: [react(), tailwindcss()],
+  resolve: {
+    tsconfigPaths: true,
+  },
   server: {
     port: 5173,
   },
@@ -12,5 +14,19 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
     target: 'es2022',
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          minSize: 20_000,
+          maxSize: 400_000,
+          groups: [
+            {
+              name: 'initial',
+              tags: ['$initial'],
+            },
+          ],
+        },
+      },
+    },
   },
 });

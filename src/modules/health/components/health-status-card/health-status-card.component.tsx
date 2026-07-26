@@ -13,7 +13,7 @@ import type { HealthStatusCardProps } from './health-status-card.types';
 
 export function HealthStatusCard(props: HealthStatusCardProps): React.JSX.Element {
   return (
-    <IonCard data-testid={HEALTH_CARD_TEST_IDS.card}>
+    <IonCard className="app-card app-health-card" data-testid={HEALTH_CARD_TEST_IDS.card}>
       <IonCardHeader>
         <IonCardTitle>{props.title}</IonCardTitle>
       </IonCardHeader>
@@ -27,7 +27,7 @@ export function HealthStatusCard(props: HealthStatusCardProps): React.JSX.Elemen
           />
         ) : null}
         {!props.isLoading && props.errorMessage === undefined ? (
-          <div className="flex flex-col gap-2">
+          <div className="flex flex-col items-start gap-3">
             <IonBadge
               color={props.isHealthy ? 'success' : 'danger'}
               data-testid={HEALTH_CARD_TEST_IDS.status}

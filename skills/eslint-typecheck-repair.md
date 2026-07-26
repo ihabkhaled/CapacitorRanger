@@ -51,8 +51,8 @@ eslint/package-ownership.config.mjs   the registry, when the complaint is a vend
    `max-depth: 3`, `max-params: 4`, `max-statements: 20`, `max-lines-per-function: 50`,
    `max-lines: 300` — tighter still for components (150/120) and hooks (200/90). Extract a function;
    do not raise the budget.
-5. **Run both compilers.** `npm run typecheck` uses `typescript7` and is authoritative;
-   `npm run typecheck:toolchain` uses TypeScript 5.9.3, which only the lint parser needs. They can
+5. **Run both compilers.** `npm run typecheck` uses `@typescript/native` and is authoritative;
+   `npm run typecheck:toolchain` uses TypeScript 6.0.2, which only the lint parser needs. They can
    disagree — fixing one and shipping is how the toolchain breaks.
 6. **Never widen a type to pass.** `strictTypeChecked` is on: `any`, a bare `as`, or a `!` where the
    value really can be null is a deferred crash. Narrow properly, or parse at the boundary

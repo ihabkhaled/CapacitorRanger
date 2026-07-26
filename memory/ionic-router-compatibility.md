@@ -5,7 +5,7 @@ would take to move.
 
 ## The pin
 
-`react-router` and `react-router-dom` at `5.3.4`, with `@ionic/react-router` at `8.8.14` and the
+`react-router` and `react-router-dom` at `5.3.4`, with `@ionic/react-router` at `8.8.15` and the
 matching `@types/react-router*`. React Router is on v7 upstream. This is not neglect, and it is not
 a choice that can be made independently.
 

@@ -15,11 +15,11 @@ import type { SettingsViewProps } from './settings-view.types';
 
 export function SettingsView(props: SettingsViewProps): React.JSX.Element {
   return (
-    <IonList inset>
+    <IonList className="app-settings-list" inset>
       <IonListHeader>
         <IonLabel>{props.appearanceLabel}</IonLabel>
       </IonListHeader>
-      <IonItem>
+      <IonItem className="app-settings-row">
         <IonLabel>{props.themeLabel}</IonLabel>
         <IonSegment
           value={props.theme}
@@ -36,7 +36,7 @@ export function SettingsView(props: SettingsViewProps): React.JSX.Element {
           ))}
         </IonSegment>
       </IonItem>
-      <IonItem>
+      <IonItem className="app-settings-row">
         <IonLabel>{props.languageLabel}</IonLabel>
         <IonSegment
           value={props.locale}
@@ -56,7 +56,7 @@ export function SettingsView(props: SettingsViewProps): React.JSX.Element {
       <IonListHeader>
         <IonLabel>{props.connectivityLabel}</IonLabel>
       </IonListHeader>
-      <IonItem>
+      <IonItem className="app-settings-row">
         <IonLabel>{props.connectivityLabel}</IonLabel>
         <IonBadge
           color={props.isOnline ? 'success' : 'warning'}
@@ -65,14 +65,14 @@ export function SettingsView(props: SettingsViewProps): React.JSX.Element {
           {props.networkStatusText}
         </IonBadge>
       </IonItem>
-      <IonItem>
+      <IonItem className="app-settings-row">
         <IonLabel>{props.apiModeLabel}</IonLabel>
         <IonNote data-testid={SETTINGS_VIEW_TEST_IDS.apiMode}>{props.apiModeText}</IonNote>
       </IonItem>
       <IonListHeader>
         <IonLabel>{props.runtimeLabel}</IonLabel>
       </IonListHeader>
-      <IonItem>
+      <IonItem className="app-settings-row">
         <IonLabel>{props.platformLabel}</IonLabel>
         <IonNote data-testid={SETTINGS_VIEW_TEST_IDS.runtimePlatform}>{props.platformText}</IonNote>
       </IonItem>

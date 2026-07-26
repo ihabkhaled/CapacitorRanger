@@ -25,7 +25,8 @@ describe('PageShell', () => {
 
     expect(getIonTitle()).toHaveTextContent('Settings');
     expect(getIonContent()).toContainElement(screen.getByTestId('page-child'));
-    expect(getIonContent()).toHaveClass('ion-padding');
+    expect(getIonContent()).toHaveClass('app-page-content');
+    expect(screen.getByRole('main')).toHaveClass('app-page-frame');
   });
 
   it('puts the test id on the ion-page root that wraps the whole screen', () => {

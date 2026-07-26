@@ -34,7 +34,7 @@ separately.
 
 ### React Router is pinned to the v5 line
 
-`@ionic/react-router@8.8.14` implements the React Router **v5** integration contract
+`@ionic/react-router@8.8.15` implements the React Router **v5** integration contract
 (`react-router@5.3.4`, `react-router-dom@5.3.4`). React Router 7/8 exist, but Ionic's router
 outlet, page transitions, and lifecycle events are written against v5. Installing v7 beside it
 would give you two routers and one working set of transitions. Revisit when Ionic ships a v7+
@@ -47,6 +47,7 @@ but work on ESLint 10. Hence:
 
 ```jsonc
 "overrides": {
+  "brace-expansion": "5.0.8",
   "eslint-plugin-jsx-a11y": { "eslint": "$eslint" },
   "eslint-plugin-react":    { "eslint": "$eslint" }
 }
@@ -55,6 +56,13 @@ but work on ESLint 10. Hence:
 Related: `eslint-plugin-react`'s `settings.react.version: 'detect'` **crashes** on ESLint 10 —
 its version probe calls the removed `context.getFilename()`. `eslint.config.mjs` pins
 `version: '19.2'` instead. Remove the override and the pin once upstream declares ESLint 10.
+
+The `brace-expansion` override resolves the patched 5.0.8 release for legacy `minimatch`
+consumers used by the lint plugins. There is no patched 1.x release, and 5.x changed the
+CommonJS and ESM export shapes. The fail-closed `postinstall` script verifies the exact version and
+source shapes, then restores the callable CommonJS and default ESM exports. Keep this
+cross-major compatibility step only while the complete lint, test, build, and security gates
+pass, and remove it when the parent packages update.
 
 ### npm is 10, though the snapshot targets 12
 
