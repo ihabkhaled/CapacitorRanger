@@ -8,6 +8,7 @@ export function AppButton(props: AppButtonProps): React.JSX.Element {
   return (
     <IonButton
       data-testid={props.testId}
+      href={props.href}
       color={BUTTON_TONE_TO_ION_COLOR[props.tone ?? 'primary']}
       type={props.type ?? 'button'}
       disabled={isDisabled}

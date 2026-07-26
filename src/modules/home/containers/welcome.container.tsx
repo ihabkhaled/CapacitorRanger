@@ -11,8 +11,15 @@ export function WelcomeContainer(): React.JSX.Element {
       <WelcomeView
         title={screen.title}
         subtitle={screen.subtitle}
+        eyebrow={screen.eyebrow}
         loginCta={screen.loginCta}
+        featuresCta={screen.featuresCta}
+        trustLabel={screen.trustLabel}
+        trustIntro={screen.trustIntro}
+        trustBrands={screen.trustBrands}
+        releaseTargets={screen.releaseTargets}
         onLoginClick={screen.onLoginClick}
+        onFeaturesClick={screen.onFeaturesClick}
       />
     </PageShell>
   );

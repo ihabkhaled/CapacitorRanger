@@ -9,7 +9,7 @@ import { initErrorReporting } from '@/packages/error-reporting';
 import { configureAppHttpClient, createHttpClient } from '@/packages/http';
 import { initI18n } from '@/packages/i18n';
 import { setupIonicReact } from '@/packages/ionic';
-import { getPlatformLogger } from '@/platform';
+import { getPlatformLogger, registerPwaServiceWorker } from '@/platform';
 import { API_MODE } from '@/shared/enums';
 
 import { buildI18nResources } from './i18n-resources.helper';
@@ -51,4 +51,5 @@ export async function startApp(): Promise<void> {
   initErrorReporting({ dsn: environment.sentryDsn, environment: environment.mode });
   await startMockModeIfEnabled();
   await bootstrapSessionFromStoredTokens();
+  await registerPwaServiceWorker(environment.isProduction);
 }

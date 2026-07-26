@@ -2,6 +2,7 @@ export * from './accessibility';
 export * from './config';
 export * from './enums';
 export * from './errors';
+export { localeFromPath, localizedPath, replacePathLocale } from './helpers/localized-path.helper';
 export * from './i18n';
 export * from './mappers';
 export * from './security';

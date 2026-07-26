@@ -183,6 +183,13 @@ export default tseslint.config(
     },
   },
   {
+    name: 'capacitor-ranger/service-worker',
+    files: ['public/service-worker.js'],
+    languageOptions: {
+      globals: { ...globals.serviceworker },
+    },
+  },
+  {
     name: 'capacitor-ranger/node-tooling',
     files: ['scripts/**/*.mjs', 'eslint/**/*.mjs', '*.config.mjs', 'eslint.config.mjs'],
     languageOptions: {

@@ -1,0 +1,91 @@
+export const SITE_ORIGIN_FALLBACK = 'https://capacitorranger.app';
+export const LOCALES = [
+  'en',
+  'ar',
+  'fr',
+  'it',
+  'de',
+  'hi',
+  'fa',
+  'th',
+  'ja',
+  'zh',
+  'es',
+  'pt',
+  'ko',
+  'tr',
+];
+export const RTL_LOCALES = new Set(['ar', 'fa']);
+export const OG_LOCALES = {
+  en: 'en_US',
+  ar: 'ar_AR',
+  fr: 'fr_FR',
+  it: 'it_IT',
+  de: 'de_DE',
+  hi: 'hi_IN',
+  fa: 'fa_IR',
+  th: 'th_TH',
+  ja: 'ja_JP',
+  zh: 'zh_CN',
+  es: 'es_ES',
+  pt: 'pt_PT',
+  ko: 'ko_KR',
+  tr: 'tr_TR',
+};
+export const PUBLIC_PAGES = [
+  {
+    slug: '',
+    titleKey: 'welcome.title',
+    descriptionKey: 'seo.welcomeDescription',
+    introKey: 'welcome.subtitle',
+    sections: [],
+  },
+  {
+    slug: 'about',
+    titleKey: 'marketing.aboutTitle',
+    descriptionKey: 'seo.aboutDescription',
+    introKey: 'marketing.aboutIntro',
+    sections: [
+      ['marketing.aboutArchitectureTitle', 'marketing.aboutArchitectureBody'],
+      ['marketing.aboutDeliveryTitle', 'marketing.aboutDeliveryBody'],
+      ['marketing.aboutStandardsTitle', 'marketing.aboutStandardsBody'],
+      ['marketing.aboutOwnershipTitle', 'marketing.aboutOwnershipBody'],
+    ],
+  },
+  {
+    slug: 'features',
+    titleKey: 'marketing.featuresTitle',
+    descriptionKey: 'seo.featuresDescription',
+    introKey: 'marketing.featuresIntro',
+    sections: [
+      ['marketing.featuresStrictTitle', 'marketing.featuresStrictBody'],
+      ['marketing.featuresNativeTitle', 'marketing.featuresNativeBody'],
+      ['marketing.featuresAiTitle', 'marketing.featuresAiBody'],
+      ['marketing.featuresExperienceTitle', 'marketing.featuresExperienceBody'],
+      ['marketing.featuresOfflineTitle', 'marketing.featuresOfflineBody'],
+    ],
+  },
+  {
+    slug: 'faq',
+    titleKey: 'marketing.faqTitle',
+    descriptionKey: 'seo.faqDescription',
+    introKey: 'marketing.faqIntro',
+    sections: [
+      ['marketing.faqStartQuestion', 'marketing.faqStartAnswer'],
+      ['marketing.faqBackendQuestion', 'marketing.faqBackendAnswer'],
+      ['marketing.faqNativeQuestion', 'marketing.faqNativeAnswer'],
+      ['marketing.faqCostQuestion', 'marketing.faqCostAnswer'],
+      ['marketing.faqLocalesQuestion', 'marketing.faqLocalesAnswer'],
+    ],
+  },
+  {
+    slug: 'contact',
+    titleKey: 'marketing.contactTitle',
+    descriptionKey: 'seo.contactDescription',
+    introKey: 'marketing.contactIntro',
+    sections: [
+      ['marketing.contactSupportTitle', 'marketing.contactSupportBody'],
+      ['marketing.contactResponseTitle', 'marketing.contactResponseBody'],
+    ],
+  },
+];

@@ -1,5 +1,5 @@
 import { IonText } from '@/packages/ionic';
-import { AppButton, AppCard } from '@/shared/ui';
+import { AppButton, TrustStrip } from '@/shared/ui';
 
 import { WELCOME_VIEW_TEST_IDS } from './welcome-view.constants';
 import type { WelcomeViewProps } from './welcome-view.types';
@@ -7,25 +7,44 @@ import type { WelcomeViewProps } from './welcome-view.types';
 export function WelcomeView(props: WelcomeViewProps): React.JSX.Element {
   return (
     <div className="app-hero-shell">
-      <div className="app-hero-orb" aria-hidden="true" />
-      <AppCard tone="accent">
-        <div className="flex flex-col items-center gap-5 px-2 py-4 text-center sm:px-6 sm:py-8">
-          <div className="app-brand-mark" aria-hidden="true" />
+      <section className="app-hero-command">
+        <div className="app-hero-copy">
+          <p className="app-hero-eyebrow">{props.eyebrow}</p>
           <IonText>
-            <h1 className="m-0 max-w-xl text-3xl font-bold tracking-tight sm:text-5xl">
-              {props.title}
-            </h1>
+            <h1>{props.title}</h1>
           </IonText>
           <IonText color="medium">
-            <p className="m-0 max-w-lg text-base leading-7 sm:text-lg">{props.subtitle}</p>
+            <p className="app-hero-subtitle">{props.subtitle}</p>
           </IonText>
-          <AppButton
-            label={props.loginCta}
-            onClick={props.onLoginClick}
-            testId={WELCOME_VIEW_TEST_IDS.loginCta}
-          />
+          <div className="app-hero-actions">
+            <AppButton
+              label={props.loginCta}
+              onClick={props.onLoginClick}
+              testId={WELCOME_VIEW_TEST_IDS.loginCta}
+            />
+            <AppButton
+              label={props.featuresCta}
+              tone="secondary"
+              onClick={props.onFeaturesClick}
+              testId={WELCOME_VIEW_TEST_IDS.featuresCta}
+            />
+          </div>
         </div>
-      </AppCard>
+        <figure className="app-release-route" aria-label={props.trustLabel}>
+          <figcaption>{props.trustIntro}</figcaption>
+          <div className="app-release-source">
+            <span>{props.trustBrands[1]}</span>
+            <small>{props.trustBrands[3]}</small>
+          </div>
+          <div className="app-release-trace" aria-hidden="true" />
+          <ul>
+            {props.releaseTargets.map((target) => (
+              <li key={target}>{target}</li>
+            ))}
+          </ul>
+        </figure>
+      </section>
+      <TrustStrip label={props.trustLabel} intro={props.trustIntro} brands={props.trustBrands} />
     </div>
   );
 }

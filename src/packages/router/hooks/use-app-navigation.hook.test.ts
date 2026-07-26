@@ -66,5 +66,13 @@ describe('useAppNavigation', () => {
     });
 
     expect(result.current.currentPath).toBe('/search');
+    expect(result.current.currentUrl).toBe('/search?q=ranger');
+  });
+
+  it('exposes a complete current URL including search and hash', () => {
+    const { result } = renderNavigation('/en/features?source=nav#strictness');
+
+    expect(result.current.currentPath).toBe('/en/features');
+    expect(result.current.currentUrl).toBe('/en/features?source=nav#strictness');
   });
 });

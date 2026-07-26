@@ -2,8 +2,9 @@ import { ROUTE_ACCESS, type AppRouteDefinition } from '@/shared/types';
 
 import { HomeContainer } from '../containers/home.container';
 import { NotFoundContainer } from '../containers/not-found.container';
+import { OfflineContainer } from '../containers/offline.container';
 import { WelcomeContainer } from '../containers/welcome.container';
-import { homePath, welcomePath } from './home.paths';
+import { homePath, offlinePath, welcomePath } from './home.paths';
 
 export function getHomeRouteDefinitions(): readonly AppRouteDefinition[] {
   return [
@@ -12,6 +13,12 @@ export function getHomeRouteDefinitions(): readonly AppRouteDefinition[] {
       exact: true,
       access: ROUTE_ACCESS.Public,
       component: WelcomeContainer,
+    },
+    {
+      path: offlinePath(),
+      exact: true,
+      access: ROUTE_ACCESS.Public,
+      component: OfflineContainer,
     },
     {
       path: homePath(),

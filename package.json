@@ -10,8 +10,9 @@
   },
   "scripts": {
     "dev": "vite",
-    "build": "node node_modules/@typescript/native/bin/tsc -b && vite build",
+    "build": "node node_modules/@typescript/native/bin/tsc -b && vite build && node scripts/build/generate-static-site.mjs && node scripts/build/validate-static-site.mjs",
     "preview": "vite preview",
+    "pwa:icons": "node scripts/build/render-pwa-icons.mjs",
     "typecheck": "node node_modules/@typescript/native/bin/tsc -b --pretty false",
     "typecheck:toolchain": "node node_modules/typescript/bin/tsc6 -b --pretty false",
     "lint": "eslint . --max-warnings=0",

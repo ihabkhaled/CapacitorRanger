@@ -20,5 +20,6 @@ export function useAppNavigation(): AppNavigation {
       history.goBack();
     },
     currentPath: location.pathname,
+    currentUrl: `${location.pathname}${location.search}${location.hash}`,
   };
 }

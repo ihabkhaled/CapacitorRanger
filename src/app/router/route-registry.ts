@@ -1,5 +1,6 @@
 import { getAuthRouteDefinitions } from '@/modules/auth';
 import { getHomeRouteDefinitions, getNotFoundRouteDefinition } from '@/modules/home';
+import { getMarketingRouteDefinitions } from '@/modules/marketing';
 import { getSettingsRouteDefinitions } from '@/modules/settings';
 import { getWorkbenchRouteDefinitions } from '@/modules/ui-workbench';
 import type { AppRouteDefinition } from '@/shared/types';
@@ -9,6 +10,7 @@ export function getAppRouteDefinitions(): readonly AppRouteDefinition[] {
   return [
     ...getAuthRouteDefinitions(),
     ...getHomeRouteDefinitions(),
+    ...getMarketingRouteDefinitions(),
     ...getSettingsRouteDefinitions(),
     ...getWorkbenchRouteDefinitions(),
   ];

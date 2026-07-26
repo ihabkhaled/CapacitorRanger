@@ -32,6 +32,8 @@ export {
   type RuntimePlatform,
 } from './runtime/runtime.facade';
 export { getSystemPrefersDark, subscribeToSystemTheme } from './runtime/system-theme.facade';
+export { subscribeToEscapeKey } from './runtime/escape-key.facade';
+export { useCompactViewport } from './runtime/hooks/use-compact-viewport.hook';
 export {
   DEFAULT_EXTERNAL_URL_POLICY,
   isAllowedExternalUrl,
@@ -39,3 +41,4 @@ export {
   type ExternalUrlPolicy,
 } from './security/url-policy.parser';
 export { createPreferencesStorageAdapter } from './storage/preferences-storage.adapter';
+export { registerPwaServiceWorker } from './service-worker/service-worker.facade';

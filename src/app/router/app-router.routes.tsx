@@ -4,6 +4,7 @@ import { APP_LOCALE } from '@/shared/enums';
 import { localizedPath } from '@/shared/helpers/localized-path.helper';
 
 import { AppLifecycle } from '../lifecycle/app-lifecycle.provider';
+import { SiteShellContainer } from '../shell/site-shell/site-shell.container';
 import { GuardedRoute } from './guarded-route.guard';
 import { getAppRouteDefinitions, getCatchAllRouteDefinition } from './route-registry';
 
@@ -13,22 +14,24 @@ export function AppRouter(): React.JSX.Element {
   return (
     <IonReactRouter>
       <AppLifecycle />
-      <IonRouterOutlet>
-        {getAppRouteDefinitions().map((definition) => (
+      <SiteShellContainer>
+        <IonRouterOutlet className="site-router-outlet">
+          {getAppRouteDefinitions().map((definition) => (
+            <Route
+              key={definition.path}
+              path={definition.path}
+              exact={definition.exact}
+              render={() => <GuardedRoute definition={definition} />}
+            />
+          ))}
           <Route
-            key={definition.path}
-            path={definition.path}
-            exact={definition.exact}
-            render={() => <GuardedRoute definition={definition} />}
+            exact
+            path={APP_PATHS.root}
+            render={() => <Redirect to={localizedPath(APP_PATHS.welcome, APP_LOCALE.English)} />}
           />
-        ))}
-        <Route
-          exact
-          path={APP_PATHS.root}
-          render={() => <Redirect to={localizedPath(APP_PATHS.welcome, APP_LOCALE.English)} />}
-        />
-        <Route render={() => <GuardedRoute definition={catchAll} />} />
-      </IonRouterOutlet>
+          <Route render={() => <GuardedRoute definition={catchAll} />} />
+        </IonRouterOutlet>
+      </SiteShellContainer>
     </IonReactRouter>
   );
 }

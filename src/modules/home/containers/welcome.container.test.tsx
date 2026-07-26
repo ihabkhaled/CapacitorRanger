@@ -11,13 +11,21 @@ import { WelcomeContainer } from './welcome.container';
 vi.mock('../hooks/use-welcome-screen.hook', () => ({ useWelcomeScreen: vi.fn() }));
 
 const onLoginClick = vi.fn();
+const onFeaturesClick = vi.fn();
 
 beforeEach(() => {
   vi.mocked(useWelcomeScreen).mockReturnValue({
-    title: 'Welcome to Capacitor Ranger',
-    subtitle: 'A strict Ionic React and Capacitor starter with enforced architecture.',
-    loginCta: 'Sign in',
+    title: 'Build the product, not the foundation',
+    subtitle: 'A production-ready Ionic React and Capacitor starter.',
+    eyebrow: 'A serious starter for ambitious teams',
+    loginCta: 'Open the product',
+    featuresCta: 'Explore the foundation',
+    trustLabel: 'Technology foundation',
+    trustIntro: 'Built around proven open-source tools.',
+    trustBrands: ['Ionic', 'React', 'Capacitor', 'TypeScript'],
+    releaseTargets: ['Web', 'Android', 'iOS'],
     onLoginClick,
+    onFeaturesClick,
   });
 });
 
@@ -39,9 +47,9 @@ describe('WelcomeContainer', () => {
   it('titles both the toolbar and the view from the screen hook', () => {
     render(<WelcomeContainer />);
 
-    expect(getIonTitle()).toHaveTextContent('Welcome to Capacitor Ranger');
+    expect(getIonTitle()).toHaveTextContent('Build the product, not the foundation');
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
-      'Welcome to Capacitor Ranger',
+      'Build the product, not the foundation',
     );
   });
 
@@ -49,9 +57,11 @@ describe('WelcomeContainer', () => {
     render(<WelcomeContainer />);
 
     expect(
-      screen.getByText('A strict Ionic React and Capacitor starter with enforced architecture.'),
+      screen.getByText('A production-ready Ionic React and Capacitor starter.'),
     ).toBeInTheDocument();
-    expect(screen.getByTestId(WELCOME_VIEW_TEST_IDS.loginCta)).toHaveTextContent('Sign in');
+    expect(screen.getByTestId(WELCOME_VIEW_TEST_IDS.loginCta)).toHaveTextContent(
+      'Open the product',
+    );
   });
 
   it('wires the call to action back to the screen hook', async () => {

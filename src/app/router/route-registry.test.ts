@@ -15,7 +15,12 @@ describe('getAppRouteDefinitions', () => {
     expect(paths()).toEqual([
       APP_PATHS.login,
       APP_PATHS.welcome,
+      APP_PATHS.offline,
       APP_PATHS.home,
+      APP_PATHS.about,
+      APP_PATHS.features,
+      APP_PATHS.faq,
+      APP_PATHS.contact,
       APP_PATHS.settings,
       APP_PATHS.workbench,
     ]);

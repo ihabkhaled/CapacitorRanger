@@ -3,4 +3,5 @@ export interface AppNavigation {
   readonly replace: (path: string) => void;
   readonly goBack: () => void;
   readonly currentPath: string;
+  readonly currentUrl: string;
 }

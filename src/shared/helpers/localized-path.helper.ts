@@ -9,3 +9,13 @@ export function localeFromPath(path: string): AppLocale {
 export function localizedPath(path: AppPath, locale: AppLocale): string {
   return path === APP_PATHS.root ? APP_PATHS.root : path.replace(LOCALE_PATH_PARAMETER, locale);
 }
+
+export function replacePathLocale(path: string, locale: AppLocale): string {
+  const segments = path.split(PATH_SEPARATOR);
+  const currentLocale = segments[1] ?? '';
+  if (isAppLocale(currentLocale)) {
+    segments[1] = locale;
+    return segments.join(PATH_SEPARATOR);
+  }
+  return localizedPath(APP_PATHS.welcome, locale);
+}
