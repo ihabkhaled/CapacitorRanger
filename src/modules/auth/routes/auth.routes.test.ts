@@ -12,7 +12,7 @@ describe('getAuthRouteDefinitions', () => {
 
     expect(definitions).toHaveLength(1);
     expect(definitions[0]!.path).toBe(loginPath());
-    expect(definitions[0]!.path).toBe('/login');
+    expect(definitions[0]!.path).toBe('/:locale/login');
   });
 
   it('matches the login path exactly and keeps it public-only', () => {

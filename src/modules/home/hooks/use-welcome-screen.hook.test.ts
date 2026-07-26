@@ -15,7 +15,7 @@ interface WelcomeProbe {
 function renderWelcome(): ReturnType<typeof renderHookWithProviders<WelcomeProbe>> {
   return renderHookWithProviders<WelcomeProbe>(
     () => ({ screen: useWelcomeScreen(), navigation: useAppNavigation() }),
-    { initialPath: '/welcome' },
+    { initialPath: '/en' },
   );
 }
 
@@ -27,11 +27,11 @@ describe('useWelcomeScreen', () => {
   it('exposes every label as translated English copy', () => {
     const { result } = renderWelcome();
 
-    expect(result.current.screen.title).toBe('Welcome to Capacitor Ranger');
+    expect(result.current.screen.title).toBe('Build the product, not the foundation');
     expect(result.current.screen.subtitle).toBe(
-      'A strict Ionic React and Capacitor starter with enforced architecture.',
+      'A production-minded Ionic React and Capacitor starter with strict architecture, accessible components, multilingual routes, and release gates already wired.',
     );
-    expect(result.current.screen.loginCta).toBe('Sign in');
+    expect(result.current.screen.loginCta).toBe('Open the product');
   });
 
   it('navigates to the login screen when the call to action fires', () => {
@@ -41,7 +41,7 @@ describe('useWelcomeScreen', () => {
       result.current.screen.onLoginClick();
     });
 
-    expect(result.current.navigation.currentPath).toBe('/login');
+    expect(result.current.navigation.currentPath).toBe('/en/login');
   });
 
   it('pushes the login screen so the user can come back to welcome', () => {
@@ -54,6 +54,6 @@ describe('useWelcomeScreen', () => {
       result.current.navigation.goBack();
     });
 
-    expect(result.current.navigation.currentPath).toBe('/welcome');
+    expect(result.current.navigation.currentPath).toBe('/en');
   });
 });

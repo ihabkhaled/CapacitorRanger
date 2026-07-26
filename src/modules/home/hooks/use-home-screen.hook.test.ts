@@ -51,7 +51,7 @@ describe('useHomeScreen', () => {
   it('exposes the static labels as translated English copy', () => {
     const { result } = renderHook(() => useHomeScreen());
 
-    expect(result.current.title).toBe('Home');
+    expect(result.current.title).toBe('Dashboard');
     expect(result.current.loadingLabel).toBe('Loading…');
     expect(result.current.logoutLabel).toBe('Sign out');
   });

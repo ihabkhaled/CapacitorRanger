@@ -5,11 +5,19 @@
  */
 export const APP_PATHS = {
   root: '/',
-  welcome: '/welcome',
-  login: '/login',
-  home: '/home',
-  settings: '/settings',
-  workbench: '/workbench',
+  welcome: '/:locale',
+  about: '/:locale/about',
+  features: '/:locale/features',
+  faq: '/:locale/faq',
+  contact: '/:locale/contact',
+  offline: '/:locale/offline',
+  login: '/:locale/login',
+  home: '/:locale/home',
+  settings: '/:locale/settings',
+  workbench: '/:locale/workbench',
 } as const;
 
 export type AppPath = (typeof APP_PATHS)[keyof typeof APP_PATHS];
+
+export const PATH_SEPARATOR = '/';
+export const LOCALE_PATH_PARAMETER = ':locale';

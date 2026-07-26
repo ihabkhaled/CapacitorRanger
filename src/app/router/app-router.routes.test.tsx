@@ -78,7 +78,7 @@ describe('AppRouter', () => {
   });
 
   it('falls through to the catch-all for an unknown path', () => {
-    visit('/definitely-not-a-route');
+    visit('/en/definitely-not-a-route');
 
     render(<AppRouter />);
 

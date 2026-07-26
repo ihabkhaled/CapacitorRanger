@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react';
 import { useLocation } from 'react-router-dom';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
-import { APP_PATHS, TEST_IDS } from '@/shared/config';
+import { TEST_IDS } from '@/shared/config';
 import { ROUTE_ACCESS, type AppRouteDefinition, type RouteAccess } from '@/shared/types';
 
 import { renderWithProviders } from '../../../tests/setup/render-with-providers.helper';
@@ -13,6 +13,8 @@ vi.mock('./hooks/use-route-guard.hook', () => ({ useRouteGuard: vi.fn() }));
 
 const SCREEN_TEST_ID = 'guarded-screen';
 const LOCATION_TEST_ID = 'current-location';
+const LOGIN_PATH = '/en/login';
+const HOME_PATH = '/en/home';
 
 function GuardedScreen(): React.JSX.Element {
   return <div data-testid={SCREEN_TEST_ID}>Screen</div>;
@@ -28,7 +30,24 @@ function buildDefinition(access: RouteAccess): AppRouteDefinition {
 }
 
 function mockGuard(options: { readonly isResolved: boolean; readonly isAuthenticated: boolean }) {
-  vi.mocked(useRouteGuard).mockReturnValue({ ...options, loadingLabel: 'Loading…' });
+  vi.mocked(useRouteGuard).mockReturnValue({
+    ...options,
+    isLocaleSupported: true,
+    loadingLabel: 'Loading…',
+    loginPath: LOGIN_PATH,
+    homePath: HOME_PATH,
+  });
+}
+
+function mockUnsupportedLocale(): void {
+  vi.mocked(useRouteGuard).mockReturnValue({
+    isResolved: true,
+    isAuthenticated: false,
+    isLocaleSupported: false,
+    loadingLabel: 'Loading…',
+    loginPath: LOGIN_PATH,
+    homePath: HOME_PATH,
+  });
 }
 
 function renderGuard(access: RouteAccess): void {
@@ -50,6 +69,15 @@ afterEach(() => {
 });
 
 describe('GuardedRoute', () => {
+  it('redirects an unsupported locale without rendering the matched screen', () => {
+    mockUnsupportedLocale();
+
+    renderGuard(ROUTE_ACCESS.Public);
+
+    expect(currentPath()).toBe('/');
+    expect(screen.queryByTestId(SCREEN_TEST_ID)).not.toBeInTheDocument();
+  });
+
   describe('while the session is still unknown', () => {
     it('shows the global loading state instead of the screen', () => {
       mockGuard({ isResolved: false, isAuthenticated: false });
@@ -83,7 +111,7 @@ describe('GuardedRoute', () => {
 
       renderGuard(ROUTE_ACCESS.Protected);
 
-      expect(currentPath()).toBe(APP_PATHS.login);
+      expect(currentPath()).toBe(LOGIN_PATH);
       expect(screen.queryByTestId(SCREEN_TEST_ID)).not.toBeInTheDocument();
     });
 
@@ -103,7 +131,7 @@ describe('GuardedRoute', () => {
 
       renderGuard(ROUTE_ACCESS.PublicOnly);
 
-      expect(currentPath()).toBe(APP_PATHS.home);
+      expect(currentPath()).toBe(HOME_PATH);
       expect(screen.queryByTestId(SCREEN_TEST_ID)).not.toBeInTheDocument();
     });
 

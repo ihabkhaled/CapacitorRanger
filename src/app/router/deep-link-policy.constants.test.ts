@@ -1,7 +1,8 @@
 import { describe, expect, it } from 'vitest';
 
 import { parseDeepLink } from '@/platform';
-import { APP_IDENTITY, APP_PATHS } from '@/shared/config';
+import { APP_IDENTITY } from '@/shared/config';
+import { APP_LOCALES } from '@/shared/enums';
 
 import { APP_DEEP_LINK_POLICY } from './deep-link-policy.constants';
 
@@ -19,39 +20,48 @@ describe('APP_DEEP_LINK_POLICY', () => {
     expect(APP_DEEP_LINK_POLICY.allowedHosts).toEqual(['capacitorranger.app', 'localhost']);
   });
 
-  it('allows exactly the canonical route table as path prefixes', () => {
-    expect(APP_DEEP_LINK_POLICY.allowedPathPrefixes).toEqual(Object.values(APP_PATHS));
-    expect([...APP_DEEP_LINK_POLICY.allowedPathPrefixes].sort()).toEqual([
-      '/',
-      '/home',
-      '/login',
-      '/settings',
-      '/welcome',
-      '/workbench',
-    ]);
+  it('expands locale route templates into concrete allowlisted prefixes', () => {
+    expect(APP_DEEP_LINK_POLICY.allowedPathPrefixes).toHaveLength(1 + APP_LOCALES.length * 10);
+    expect(APP_DEEP_LINK_POLICY.allowedPathPrefixes).toContain('/');
+    expect(APP_DEEP_LINK_POLICY.allowedPathPrefixes).toContain('/en/home');
+    expect(APP_DEEP_LINK_POLICY.allowedPathPrefixes).toContain('/ar/settings');
+    expect(APP_DEEP_LINK_POLICY.allowedPathPrefixes.some((path) => path.includes(':'))).toBe(false);
   });
 
   it('admits a link to a real screen', () => {
-    expect(parseDeepLink('https://capacitorranger.app/home', APP_DEEP_LINK_POLICY)).toMatchObject({
+    expect(
+      parseDeepLink('https://capacitorranger.app/en/home', APP_DEEP_LINK_POLICY),
+    ).toMatchObject({
       ok: true,
-      value: '/home',
+      value: '/en/home',
     });
   });
 
   it('admits a link opened through the app custom scheme', () => {
     expect(
-      parseDeepLink('com.capacitorranger.app://capacitorranger.app/settings', APP_DEEP_LINK_POLICY)
-        .ok,
+      parseDeepLink(
+        'com.capacitorranger.app://capacitorranger.app/ar/settings',
+        APP_DEEP_LINK_POLICY,
+      ).ok,
     ).toBe(true);
   });
 
   it('rejects a link from a look-alike host', () => {
     expect(
-      parseDeepLink('https://capacitorranger.app.evil.com/home', APP_DEEP_LINK_POLICY).ok,
+      parseDeepLink('https://capacitorranger.app.evil.com/en/home', APP_DEEP_LINK_POLICY).ok,
     ).toBe(false);
   });
 
   it('rejects a plain http link', () => {
-    expect(parseDeepLink('http://capacitorranger.app/home', APP_DEEP_LINK_POLICY).ok).toBe(false);
+    expect(parseDeepLink('http://capacitorranger.app/en/home', APP_DEEP_LINK_POLICY).ok).toBe(
+      false,
+    );
+  });
+
+  it('rejects an unsupported locale even when the remaining path is real', () => {
+    expect(parseDeepLink('https://capacitorranger.app/xx/home', APP_DEEP_LINK_POLICY)).toEqual({
+      ok: false,
+      error: { reason: 'path' },
+    });
   });
 });

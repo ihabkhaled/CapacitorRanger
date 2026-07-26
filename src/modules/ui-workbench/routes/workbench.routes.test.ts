@@ -12,7 +12,7 @@ describe('getWorkbenchRouteDefinitions', () => {
 
     expect(definitions).toHaveLength(1);
     expect(definitions[0]!.path).toBe(workbenchPath());
-    expect(definitions[0]!.path).toBe('/workbench');
+    expect(definitions[0]!.path).toBe('/:locale/workbench');
   });
 
   it('matches the workbench path exactly and keeps it public', () => {

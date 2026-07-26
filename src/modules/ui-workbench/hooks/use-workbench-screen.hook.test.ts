@@ -48,7 +48,7 @@ describe('useWorkbenchScreen', () => {
   it('exposes the screen and section headings as translated English copy', () => {
     const { result } = renderHook(() => useWorkbenchScreen());
 
-    expect(result.current.title).toBe('UI Workbench');
+    expect(result.current.title).toBe('UI workbench');
     expect(result.current.buttonsSection).toBe('Buttons');
     expect(result.current.formSection).toBe('Form');
     expect(result.current.statesSection).toBe('States');

@@ -8,11 +8,16 @@ describe('APP_PATHS', () => {
   it('pins the canonical route table', () => {
     expect(APP_PATHS).toEqual({
       root: '/',
-      welcome: '/welcome',
-      login: '/login',
-      home: '/home',
-      settings: '/settings',
-      workbench: '/workbench',
+      welcome: '/:locale',
+      about: '/:locale/about',
+      features: '/:locale/features',
+      faq: '/:locale/faq',
+      contact: '/:locale/contact',
+      offline: '/:locale/offline',
+      login: '/:locale/login',
+      home: '/:locale/home',
+      settings: '/:locale/settings',
+      workbench: '/:locale/workbench',
     });
   });
 

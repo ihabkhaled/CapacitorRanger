@@ -7,13 +7,13 @@ import { homePath, welcomePath } from './home.paths';
 describe('welcomePath', () => {
   it('derives the welcome route from the canonical route table', () => {
     expect(welcomePath()).toBe(APP_PATHS.welcome);
-    expect(welcomePath()).toBe('/welcome');
+    expect(welcomePath()).toBe('/:locale');
   });
 });
 
 describe('homePath', () => {
   it('derives the home route from the canonical route table', () => {
     expect(homePath()).toBe(APP_PATHS.home);
-    expect(homePath()).toBe('/home');
+    expect(homePath()).toBe('/:locale/home');
   });
 });

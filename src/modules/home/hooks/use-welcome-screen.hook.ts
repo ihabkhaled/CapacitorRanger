@@ -1,6 +1,7 @@
 import { useAppTranslation } from '@/packages/i18n';
 import { useAppNavigation } from '@/packages/router';
 import { APP_PATHS } from '@/shared/config';
+import { localeFromPath, localizedPath } from '@/shared/helpers/localized-path.helper';
 import { I18N_KEYS } from '@/shared/i18n';
 
 export interface WelcomeScreenView {
@@ -13,12 +14,13 @@ export interface WelcomeScreenView {
 export function useWelcomeScreen(): WelcomeScreenView {
   const { t } = useAppTranslation();
   const navigation = useAppNavigation();
+  const locale = localeFromPath(navigation.currentPath);
   return {
     title: t(I18N_KEYS.welcome.title),
     subtitle: t(I18N_KEYS.welcome.subtitle),
     loginCta: t(I18N_KEYS.welcome.loginCta),
     onLoginClick: () => {
-      navigation.push(APP_PATHS.login);
+      navigation.push(localizedPath(APP_PATHS.login, locale));
     },
   };
 }

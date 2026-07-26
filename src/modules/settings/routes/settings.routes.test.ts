@@ -12,7 +12,7 @@ describe('getSettingsRouteDefinitions', () => {
 
     expect(definitions).toHaveLength(1);
     expect(definitions[0]!.path).toBe(settingsPath());
-    expect(definitions[0]!.path).toBe('/settings');
+    expect(definitions[0]!.path).toBe('/:locale/settings');
   });
 
   it('matches the settings path exactly and keeps it public', () => {

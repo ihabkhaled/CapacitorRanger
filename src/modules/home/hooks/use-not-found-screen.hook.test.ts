@@ -39,7 +39,7 @@ describe('useNotFoundScreen', () => {
       result.current.screen.onGoHome();
     });
 
-    expect(result.current.navigation.currentPath).toBe('/');
+    expect(result.current.navigation.currentPath).toBe('/en');
   });
 
   it('replaces the dead route so it never returns through history', () => {

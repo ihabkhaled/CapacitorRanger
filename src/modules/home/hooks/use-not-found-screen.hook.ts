@@ -1,6 +1,7 @@
 import { useAppTranslation } from '@/packages/i18n';
 import { useAppNavigation } from '@/packages/router';
 import { APP_PATHS } from '@/shared/config';
+import { localeFromPath, localizedPath } from '@/shared/helpers/localized-path.helper';
 import { I18N_KEYS } from '@/shared/i18n';
 
 export interface NotFoundScreenView {
@@ -18,7 +19,7 @@ export function useNotFoundScreen(): NotFoundScreenView {
     message: t(I18N_KEYS.notFound.message),
     goHomeLabel: t(I18N_KEYS.notFound.goHome),
     onGoHome: () => {
-      navigation.replace(APP_PATHS.root);
+      navigation.replace(localizedPath(APP_PATHS.welcome, localeFromPath(navigation.currentPath)));
     },
   };
 }

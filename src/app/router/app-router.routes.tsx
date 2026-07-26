@@ -1,5 +1,7 @@
 import { IonReactRouter, IonRouterOutlet, Redirect, Route } from '@/packages/router';
 import { APP_PATHS } from '@/shared/config';
+import { APP_LOCALE } from '@/shared/enums';
+import { localizedPath } from '@/shared/helpers/localized-path.helper';
 
 import { AppLifecycle } from '../lifecycle/app-lifecycle.provider';
 import { GuardedRoute } from './guarded-route.guard';
@@ -20,7 +22,11 @@ export function AppRouter(): React.JSX.Element {
             render={() => <GuardedRoute definition={definition} />}
           />
         ))}
-        <Route exact path={APP_PATHS.root} render={() => <Redirect to={APP_PATHS.welcome} />} />
+        <Route
+          exact
+          path={APP_PATHS.root}
+          render={() => <Redirect to={localizedPath(APP_PATHS.welcome, APP_LOCALE.English)} />}
+        />
         <Route render={() => <GuardedRoute definition={catchAll} />} />
       </IonRouterOutlet>
     </IonReactRouter>
