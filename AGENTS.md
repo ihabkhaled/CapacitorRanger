@@ -46,6 +46,8 @@ npm run knowledge:context -- --task="<exact task>"
    components → containers → routes.
 5. Run targeted tests, then the gates your risk lane requires.
 6. Update canonical docs, then rebuild `.ai` (`npm run knowledge:build`).
+7. Commit each coherent green behavior/docs/test batch separately with a conventional message,
+   then push `main`; never bypass hooks or defer all publication to one final mega-commit.
 
 ## Validation
 

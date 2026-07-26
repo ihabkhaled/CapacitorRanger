@@ -21,6 +21,14 @@ gates, and the test suite — the last cheap chance before CI.
 pre-commit hook already runs it over staged files, which is where a wrong filename is cheapest to
 fix.
 
+## Checkpoint publication
+
+After the focused deterministic gate for a coherent batch passes, stage only that concern, inspect
+the staged diff, create a conventional commit, and push `main`. Documentation, design, runtime, and
+test-only concerns remain separate when they can stand independently. Never publish a known-red
+checkpoint, bypass hooks, or defer all work to a final mega-commit. The canonical policy is
+[rule 32](../rules/32-version-control-checkpoints.md).
+
 ## `npm run quality` — 17 gates
 
 | #   | Gate                         | Proves                                                                                                                                   |
