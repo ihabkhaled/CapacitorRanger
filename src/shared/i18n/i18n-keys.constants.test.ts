@@ -43,9 +43,15 @@ describe('I18N_KEYS', () => {
   it('groups every key under a namespace', () => {
     expect(Object.keys(I18N_KEYS)).toEqual([
       'common',
+      'shell',
+      'navigation',
+      'languages',
+      'footer',
       'errors',
       'states',
       'welcome',
+      'marketing',
+      'seo',
       'auth',
       'home',
       'health',

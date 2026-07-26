@@ -3,6 +3,7 @@ export type RawEnvironmentSource = Readonly<Record<string, unknown>>;
 export interface AppEnvironment {
   readonly appName: string;
   readonly appId: string;
+  readonly publicSiteUrl: string;
   readonly apiBaseUrl: string;
   readonly apiMode: 'mock' | 'remote';
   readonly apiTimeoutMs: number;

@@ -15,7 +15,7 @@ import type * as I18nPackage from '@/packages/i18n';
 import { initI18n } from '@/packages/i18n';
 import { setupIonicReact } from '@/packages/ionic';
 import { startMockWorker } from '@/tests/msw/browser';
-import { API_MODE } from '@/shared/enums';
+import { API_MODE, APP_LOCALES } from '@/shared/enums';
 
 import { startApp } from './start-app';
 
@@ -83,12 +83,12 @@ describe('startApp', () => {
     );
   });
 
-  it('initializes i18n with both bundled catalogs and the environment locales', async () => {
+  it('initializes i18n with every bundled catalog and the environment locales', async () => {
     await startApp();
 
     expect(initI18n).toHaveBeenCalledOnce();
     const [options] = vi.mocked(initI18n).mock.calls[0]!;
-    expect(Object.keys(options.resources).sort()).toEqual(['ar', 'en']);
+    expect(Object.keys(options.resources).sort()).toEqual([...APP_LOCALES].sort());
     expect(options.defaultLocale).toBe(REAL_ENVIRONMENT.defaultLocale);
     expect(options.supportedLocales).toEqual(REAL_ENVIRONMENT.supportedLocales);
   });

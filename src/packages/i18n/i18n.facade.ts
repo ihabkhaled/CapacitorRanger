@@ -17,7 +17,8 @@ export async function initI18n(options: InitI18nOptions): Promise<void> {
       supportedLngs: [...options.supportedLocales],
       nonExplicitSupportedLngs: true,
       detection: {
-        order: ['querystring', 'navigator'],
+        order: ['path', 'querystring', 'navigator'],
+        lookupFromPathIndex: 0,
         caches: [],
       },
       interpolation: {

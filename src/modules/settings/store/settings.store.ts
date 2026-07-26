@@ -2,7 +2,13 @@ import { getEnvironment } from '@/packages/environment';
 import { createPersistedAppStore } from '@/packages/state';
 import { createPreferencesStorageAdapter } from '@/platform';
 import { STORAGE_KEYS } from '@/shared/config';
-import { APP_LOCALE, THEME_MODE, type AppLocale, type ThemeMode } from '@/shared/enums';
+import {
+  APP_LOCALE,
+  THEME_MODE,
+  isAppLocale,
+  type AppLocale,
+  type ThemeMode,
+} from '@/shared/enums';
 
 import {
   migratePersistedSettings,
@@ -23,8 +29,9 @@ function resolveDefaults(): PersistedSettings {
     environment.defaultTheme === THEME_MODE.Light || environment.defaultTheme === THEME_MODE.Dark
       ? environment.defaultTheme
       : THEME_MODE.System;
-  const locale =
-    environment.defaultLocale === APP_LOCALE.Arabic ? APP_LOCALE.Arabic : APP_LOCALE.English;
+  const locale = isAppLocale(environment.defaultLocale)
+    ? environment.defaultLocale
+    : APP_LOCALE.English;
   return { theme, locale };
 }
 

@@ -40,7 +40,7 @@ describe('persistedSettingsSchema', () => {
   });
 
   it('rejects an unknown locale', () => {
-    expect(pathsOf({ theme: THEME_MODE.Light, locale: 'fr' })).toEqual(['locale']);
+    expect(pathsOf({ theme: THEME_MODE.Light, locale: 'xx' })).toEqual(['locale']);
   });
 
   it('rejects a payload missing the theme', () => {

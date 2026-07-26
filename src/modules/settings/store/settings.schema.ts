@@ -8,8 +8,5 @@ export const persistedSettingsSchema = schemaBuilder.object({
     schemaBuilder.literal(THEME_MODE.Dark),
     schemaBuilder.literal(THEME_MODE.System),
   ]),
-  locale: schemaBuilder.union([
-    schemaBuilder.literal(APP_LOCALE.English),
-    schemaBuilder.literal(APP_LOCALE.Arabic),
-  ]),
+  locale: schemaBuilder.enum(APP_LOCALE),
 });

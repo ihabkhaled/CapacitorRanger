@@ -6,6 +6,7 @@ import type { RawEnvironmentSource } from './environment.types';
 const VALID_SOURCE = {
   VITE_APP_NAME: 'Capacitor Ranger',
   VITE_APP_ID: 'com.capacitorranger.app',
+  VITE_PUBLIC_SITE_URL: 'https://capacitorranger.app',
   VITE_API_BASE_URL: 'http://localhost:3000/api/v1',
   VITE_API_MODE: 'mock',
   VITE_API_TIMEOUT_MS: '5000',
@@ -26,6 +27,7 @@ describe('createEnvironment', () => {
     expect(createEnvironment(buildSource())).toEqual({
       appName: 'Capacitor Ranger',
       appId: 'com.capacitorranger.app',
+      publicSiteUrl: 'https://capacitorranger.app',
       apiBaseUrl: 'http://localhost:3000/api/v1',
       apiMode: 'mock',
       apiTimeoutMs: 5000,
@@ -94,6 +96,7 @@ describe('createEnvironment', () => {
     ['a single-segment app id', { VITE_APP_ID: 'app' }],
     ['an app id segment starting with a digit', { VITE_APP_ID: 'com.1ranger' }],
     ['an app id segment with a dash', { VITE_APP_ID: 'com.capacitor-ranger' }],
+    ['a malformed public site url', { VITE_PUBLIC_SITE_URL: 'not-a-url' }],
     ['a non-url api base', { VITE_API_BASE_URL: '/api/v1' }],
     ['an unknown api mode', { VITE_API_MODE: 'live' }],
     ['a non-numeric timeout', { VITE_API_TIMEOUT_MS: 'soon' }],

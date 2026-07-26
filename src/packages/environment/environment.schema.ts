@@ -32,6 +32,7 @@ function isReverseDomainAppId(value: string): boolean {
 export const rawEnvironmentSchema = schemaBuilder.object({
   VITE_APP_NAME: schemaBuilder.string().min(1),
   VITE_APP_ID: schemaBuilder.string().refine(isReverseDomainAppId),
+  VITE_PUBLIC_SITE_URL: schemaBuilder.url(),
   VITE_API_BASE_URL: schemaBuilder.url(),
   VITE_API_MODE: schemaBuilder.union([
     schemaBuilder.literal('mock'),

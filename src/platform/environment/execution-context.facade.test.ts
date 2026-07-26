@@ -13,6 +13,7 @@ function buildEnvironment(overrides: Partial<AppEnvironment> = {}): AppEnvironme
   return {
     appName: 'Capacitor Ranger',
     appId: 'com.capacitorranger.app',
+    publicSiteUrl: 'https://capacitorranger.app',
     apiBaseUrl: 'http://localhost:3000/api/v1',
     apiMode: 'mock',
     apiTimeoutMs: 5000,

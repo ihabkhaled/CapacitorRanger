@@ -16,6 +16,7 @@ export function createEnvironment(source: RawEnvironmentSource): AppEnvironment 
   return Object.freeze({
     appName: raw.VITE_APP_NAME,
     appId: raw.VITE_APP_ID,
+    publicSiteUrl: raw.VITE_PUBLIC_SITE_URL,
     apiBaseUrl: raw.VITE_API_BASE_URL,
     apiMode: raw.VITE_API_MODE,
     apiTimeoutMs: raw.VITE_API_TIMEOUT_MS,
