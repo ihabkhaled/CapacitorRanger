@@ -15,7 +15,7 @@ export function AppInput(props: AppInputProps): React.JSX.Element {
       {...(props.placeholder === undefined ? {} : { placeholder: props.placeholder })}
       {...(props.autocomplete === undefined ? {} : { autocomplete: props.autocomplete })}
       {...(props.errorMessage === undefined ? {} : { errorText: props.errorMessage })}
-      className={toInputStateClass(props.errorMessage !== undefined)}
+      className={`app-input ${toInputStateClass(props.errorMessage !== undefined)}`}
       onIonInput={(event) => {
         props.onValueChange(extractIonInputValue(event.detail.value));
       }}

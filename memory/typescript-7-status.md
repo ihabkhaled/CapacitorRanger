@@ -5,16 +5,16 @@ The dual-compiler snapshot and its exit condition. The rationale is
 
 ## Current state — dual compiler, still required
 
-| Role             | Package             | Version                    | Invoked as                                 |
-| ---------------- | ------------------- | -------------------------- | ------------------------------------------ |
-| Primary compiler | `typescript7`       | alias → `typescript@7.0.2` | `node node_modules/typescript7/bin/tsc -b` |
-| Parser compiler  | `typescript`        | `5.9.3`                    | `tsc` (whatever is on `PATH`)              |
-| Consumer         | `typescript-eslint` | `8.64.0`                   | peer `typescript: >=4.8.4 <6.1.0`          |
+| Role             | Package              | Version                    | Invoked as                                        |
+| ---------------- | -------------------- | -------------------------- | ------------------------------------------------- |
+| Primary compiler | `@typescript/native` | alias → `typescript@7.0.2` | `node node_modules/@typescript/native/bin/tsc -b` |
+| Parser compiler  | `typescript`         | `6.0.2`                    | `node node_modules/typescript/bin/tsc6 -b`        |
+| Consumer         | `typescript-eslint`  | `8.65.0`                   | peer `typescript: >=4.8.4 <6.1.0`                 |
 
 The alias exists because two majors of the same package cannot both be named `typescript`. As a side
 effect the primary compiler does not own the `tsc` bin, so it must be invoked by path.
 
-**Verified 2026-07-16:** `typescript-eslint@8.64.0` declares
+**Verified 2026-07-16:** `typescript-eslint@8.65.0` declares
 `peerDependencies.typescript: ">=4.8.4 <6.1.0"`. The upper bound `<6.1.0` excludes major 7, so the
 dual arrangement is still necessary. Re-verify with:
 
@@ -26,17 +26,17 @@ node -e "console.log(require('./node_modules/typescript-eslint/package.json').pe
 
 - `npm run typecheck` → **TS 7.0.2**. This is the verdict that matters.
 - `npm run build` → **TS 7.0.2** project build, then `vite build`.
-- `npm run typecheck:toolchain` → **TS 5.9.3**. Not redundant: it proves the compiler the linter
+- `npm run typecheck:toolchain` → **TS 6.0.2**. Not redundant: it proves the compiler the linter
   loads in-process also accepts the code, so a type-aware rule cannot be reasoning about a program
   that would not compile.
 
-Both run inside `npm run quality`. `typescript7` sits in `knip.json` `ignoreDependencies` because
-nothing imports it by name.
+Both run inside `npm run quality`. Knip discovers both compiler packages from the explicit npm
+scripts, so neither needs an ignore entry.
 
 ## The footgun
 
 Bare `npx tsc`, an editor's bundled TypeScript, and any tool resolving `typescript` from
-`node_modules` all get **5.9.3**, not the primary compiler. A file that typechecks in the editor can
+`node_modules` all get **6.0.2**, not the primary compiler. A file that typechecks in the editor can
 still fail `npm run typecheck`. When they disagree, TS7 is the authority — reproduce with the npm
 script, never the bare binary.
 
@@ -55,9 +55,9 @@ when the dual setup has become unnecessary, with a message that is the removal c
 deliberately outside the `quality` chain: a retirement alarm run during dependency work, not a
 per-commit gate.
 
-**When it fires:** drop the `typescript` 5.x devDependency; point `typescript` at v7 and delete the
-`typescript7` alias; collapse the two typecheck scripts into one and update the gate table in
-[release-gates](../context/release-gates.md); remove `typescript7` from `knip.json`; retire ADR 0011
+**When it fires:** drop the `typescript` 6 compatibility alias; point `typescript` at v7 and delete the
+`@typescript/native` alias; collapse the two typecheck scripts into one and update the gate table in
+[release-gates](../context/release-gates.md); retire ADR 0011
 per its own Supersession clause and update this page.
 
 ## Related constraint

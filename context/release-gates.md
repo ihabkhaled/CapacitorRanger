@@ -5,7 +5,7 @@ these are the scripts that exist and the order they run in.
 
 ```text
 pre-commit  →  pre-push  →  npm run quality  →  npm run validate:web  →  npm run validate:native
-                                 (17 gates)          (quality + 9)             (4 gates)
+                                 (18 gates)          (quality + 9)             (4 gates)
                                                           └──────── npm run validate ────────┘
 ```
 
@@ -27,21 +27,22 @@ fix.
 | --- | ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
 | 1   | `format:check`               | Prettier is clean; formatting is never a review topic                                                                                    |
 | 2   | `lint`                       | ESLint at `--max-warnings=0`: 50 architecture rules + strict type-aware rules                                                            |
-| 3   | `typecheck`                  | The **primary** compiler (TS 7.0.2, via `node node_modules/typescript7/bin/tsc -b`)                                                      |
-| 4   | `typecheck:toolchain`        | The parser compiler (TS 5.9.3) also accepts the code — see [ADR 0011](../architecture/adrs/0011-typescript-7-toolchain-compatibility.md) |
-| 5   | `quality:architecture-rules` | The architecture rules' own fixtures still accept and reject correctly                                                                   |
-| 6   | `test:coverage`              | All Vitest projects pass and coverage is written                                                                                         |
-| 7   | `test:coverage:per-file`     | No file is below its threshold — named, not averaged                                                                                     |
-| 8   | `build`                      | TS7 project build + a real Vite production bundle                                                                                        |
-| 9   | `quality:architecture`       | Layer direction and module structure, re-derived independently of lint                                                                   |
-| 10  | `quality:package-ownership`  | Every dependency has an owner; no vendor imported outside it                                                                             |
-| 11  | `quality:dead-code`          | knip: no unused files, exports, or dependencies                                                                                          |
-| 12  | `quality:circular`           | madge: no import cycles under `src/`                                                                                                     |
-| 13  | `quality:duplicates`         | jscpd at `--threshold 0`: no copy-paste in `src/` or `tests/`                                                                            |
-| 14  | `quality:exports`            | `index.ts` files are re-export surfaces only, and every export resolves                                                                  |
-| 15  | `quality:locales`            | `en`/`ar` key-tree parity; every `I18N_KEYS` leaf exists; no orphan copy                                                                 |
-| 16  | `quality:docs`               | Every relative doc link resolves; every ESLint rule has a doc                                                                            |
-| 17  | `quality:agent-docs`         | Agent entrypoints exist and share one `Governance-Version`                                                                               |
+| 3   | `typecheck:compiler`         | The build executable resolves to the exact TS 7 version pinned by `@typescript/native`                                                   |
+| 4   | `typecheck`                  | The **primary** compiler (TS 7.0.2, via `node node_modules/@typescript/native/bin/tsc -b`)                                               |
+| 5   | `typecheck:toolchain`        | The parser compiler (TS 6.0.2) also accepts the code — see [ADR 0011](../architecture/adrs/0011-typescript-7-toolchain-compatibility.md) |
+| 6   | `quality:architecture-rules` | The architecture rules' own fixtures still accept and reject correctly                                                                   |
+| 7   | `test:coverage`              | All Vitest projects pass and coverage is written                                                                                         |
+| 8   | `test:coverage:per-file`     | No file is below its threshold — named, not averaged                                                                                     |
+| 9   | `build`                      | TS7 project build + a real Vite production bundle                                                                                        |
+| 10  | `quality:architecture`       | Layer direction and module structure, re-derived independently of lint                                                                   |
+| 11  | `quality:package-ownership`  | Every dependency has an owner; no vendor imported outside it                                                                             |
+| 12  | `quality:dead-code`          | knip: no unused files, exports, or dependencies                                                                                          |
+| 13  | `quality:circular`           | dependency-cruiser: no import cycles under `src/`                                                                                        |
+| 14  | `quality:duplicates`         | jscpd at `--threshold 0`: no copy-paste in `src/` or `tests/`                                                                            |
+| 15  | `quality:exports`            | `index.ts` files are re-export surfaces only, and every export resolves                                                                  |
+| 16  | `quality:locales`            | `en`/`ar` key-tree parity; every `I18N_KEYS` leaf exists; no orphan copy                                                                 |
+| 17  | `quality:docs`               | Every relative doc link resolves; every ESLint rule has a doc                                                                            |
+| 18  | `quality:agent-docs`         | Agent entrypoints exist and share one `Governance-Version`                                                                               |
 
 Order is deliberate. Formatting and lint fail in seconds; the build and the full suite come after
 the cheap gates have already rejected the obvious. Gates 9 and 10 duplicate lint on purpose: a

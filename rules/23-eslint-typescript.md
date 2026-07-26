@@ -6,7 +6,7 @@
 
 - MUST pass `eslint . --max-warnings=0`: there is no warning tier, so nothing accumulates.
 - MUST typecheck twice — `npm run typecheck` on the TypeScript 7 toolchain and
-  `npm run typecheck:toolchain` on the 5.9 baseline — because the repo builds with `typescript7`
+  `npm run typecheck:toolchain` on the 5.9 baseline — because the repo builds with `@typescript/native`
   while the editor and `typescript-eslint` run on 5.9.
 - MUST keep every strictness flag in `tsconfig.base.json` enabled:
 

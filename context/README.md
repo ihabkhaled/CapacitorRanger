@@ -8,20 +8,21 @@ right and the map is a bug — fix it in the same change.
 
 ## The maps
 
-| Map                                                 | Answers                                                            |
-| --------------------------------------------------- | ------------------------------------------------------------------ |
-| [architecture-map](./architecture-map.md)           | The five layers, the one-way rule, what lives where, entry points  |
-| [dependency-map](./dependency-map.md)               | Every vendor, its owner, and why that owner exists                 |
-| [module-anatomy](./module-anatomy.md)               | The canonical module skeleton and the bottom-up build order        |
-| [package-ownership](./package-ownership.md)         | The registry, the rule family, the type-only exception, the script |
-| [api-flow](./api-flow.md)                           | Container → hook → query → service → gateway → Axios → MSW/Nest    |
-| [auth-flow](./auth-flow.md)                         | Login, token storage, single-flight refresh, failure, logout       |
-| [error-flow](./error-flow.md)                       | Axios error → `HttpError` → `AppError` → i18n key → UI copy        |
-| [native-capability-map](./native-capability-map.md) | Plugin → owner → platform facade → consumer, and what is absent    |
-| [routing-map](./routing-map.md)                     | Route table, access levels, guard behavior, deep-link allowlist    |
-| [state-ownership-map](./state-ownership-map.md)     | Server vs client state — and what belongs in neither               |
-| [test-strategy-map](./test-strategy-map.md)         | Six test layers, what each proves, the coverage policy             |
-| [release-gates](./release-gates.md)                 | The real gate chain and what each link proves                      |
+| Map                                                 | Answers                                                             |
+| --------------------------------------------------- | ------------------------------------------------------------------- |
+| [architecture-map](./architecture-map.md)           | The five layers, the one-way rule, what lives where, entry points   |
+| [dependency-map](./dependency-map.md)               | Every vendor, its owner, and why that owner exists                  |
+| [design-system](./design-system.md)                 | Shared UI imports, composition rules, theme ownership, visual gates |
+| [module-anatomy](./module-anatomy.md)               | The canonical module skeleton and the bottom-up build order         |
+| [package-ownership](./package-ownership.md)         | The registry, the rule family, the type-only exception, the script  |
+| [api-flow](./api-flow.md)                           | Container → hook → query → service → gateway → Axios → MSW/Nest     |
+| [auth-flow](./auth-flow.md)                         | Login, token storage, single-flight refresh, failure, logout        |
+| [error-flow](./error-flow.md)                       | Axios error → `HttpError` → `AppError` → i18n key → UI copy         |
+| [native-capability-map](./native-capability-map.md) | Plugin → owner → platform facade → consumer, and what is absent     |
+| [routing-map](./routing-map.md)                     | Route table, access levels, guard behavior, deep-link allowlist     |
+| [state-ownership-map](./state-ownership-map.md)     | Server vs client state — and what belongs in neither                |
+| [test-strategy-map](./test-strategy-map.md)         | Six test layers, what each proves, the coverage policy              |
+| [release-gates](./release-gates.md)                 | The real gate chain and what each link proves                       |
 
 ## Where to start
 

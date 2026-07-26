@@ -7,7 +7,7 @@ already in the code — so nobody pays for it twice.
 
 npm 12 declares `engines.node: ^22.22.2 || ^24.15.0 || >=26`. The installed Node is **24.14.1**,
 which falls in the gap _below_ `^24.15.0` — so npm 12 is uninstallable here despite Node 24 being
-current. `package.json` therefore declares `engines.npm: ">=10"` (the toolchain runs on npm 10.7.0).
+current. `package.json` therefore declares `engines.npm: ">=10"` (the toolchain runs on npm 10.8.0).
 Do not raise that range to match a newer npm without first checking `node -v` against npm's own
 range. `.nvmrc` pins the Node major to `24`.
 
@@ -29,7 +29,7 @@ Do not generalize the trick to a peer enforced for a real reason (see
 ## 4. TypeScript 7 removed `baseUrl` (TS5102)
 
 Setting `baseUrl` in any tsconfig now raises **TS5102**. `tsconfig.base.json` declares `paths`
-without it — `"@/*": ["./src/*"]` — and `vite-tsconfig-paths` resolves at build and test time.
+without it — `"@/*": ["./src/*"]` — and `Vite resolve.tsconfigPaths` resolves at build and test time.
 Copying a `baseUrl` line in from an older project breaks `npm run typecheck` immediately.
 
 ## 5. `@sentry/capacitor@4.2.0` pins `@sentry/react` to an exact version

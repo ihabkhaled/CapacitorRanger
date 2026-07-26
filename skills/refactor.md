@@ -31,7 +31,7 @@ src/modules/*/README.md     edit when the anatomy or surface changes
 
 1. **Separate the commits.** Behavior change and structure change never share one. A reviewer must
    be able to read a refactor diff and see nothing happen.
-2. **Let the gates aim you.** They name real problems: `npm run quality:circular` (madge) finds
+2. **Let the gates aim you.** They name real problems: `npm run quality:circular` (dependency-cruiser) finds
    import cycles, `npm run quality:duplicates` (jscpd, `--threshold 0`) finds copy-paste,
    `npm run quality:dead-code` (knip) finds unused exports, and the complexity budgets in
    `eslint.config.mjs` — `complexity: 8`, `sonarjs/cognitive-complexity: 10`, `max-lines: 300`,

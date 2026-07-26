@@ -11,7 +11,7 @@ export function WorkbenchContainer(): React.JSX.Element {
   const screen = useWorkbenchScreen();
   return (
     <PageShell title={screen.title} testId={TEST_IDS.workbenchPage}>
-      <div className="flex flex-col gap-6">
+      <div className="flex flex-col gap-5 sm:gap-6">
         <WorkbenchButtons
           heading={screen.buttonsSection}
           primaryLabel={screen.buttonPrimary}

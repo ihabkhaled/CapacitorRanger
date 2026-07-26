@@ -7,8 +7,8 @@
 ## Context
 
 TypeScript 7 is the native-port compiler and is worth adopting for its checking speed on a strict
-codebase. It cannot simply replace TypeScript 5, because `typescript-eslint@8.64.0` declares
-`peerDependencies.typescript` as `>=4.8.4 <6.1.0`. That range excludes both 6 and 7, and the parser
+codebase. It cannot simply replace the programmatic compiler API, because `typescript-eslint@8.65.0` declares
+`peerDependencies.typescript` as `>=4.8.4 <6.1.0`. That range accepts 6.0.2 but excludes 7, and the parser
 loads the compiler in-process to build the type-aware program that `strictTypeChecked` needs. So the
 choice is: skip TS7, drop type-aware linting, or install both compilers and give each one job.
 
@@ -20,21 +20,21 @@ independently of this decision.
 Run two compilers, with a single, explicit division of labour.
 
 - **Primary compiler — TypeScript 7.0.2**, installed under the npm alias
-  `"typescript7": "npm:typescript@7.0.2"`. It is the only compiler whose verdict gates the build.
+  `"@typescript/native": "npm:typescript@7.0.2"`. It is the only compiler whose verdict gates the build.
   Because the alias does not own the `tsc` bin name, it is invoked by path:
-  - `npm run typecheck` → `node node_modules/typescript7/bin/tsc -b --pretty false`
-  - `npm run build` → `node node_modules/typescript7/bin/tsc -b && vite build`
-- **Parser compiler — TypeScript 5.9.3**, installed as plain `typescript`. It exists _only_ to
-  satisfy the typescript-eslint peer range and is what `tsc` on `PATH` resolves to. Its own pass,
-  `npm run typecheck:toolchain` (`tsc -b --pretty false`), is kept in the `quality` chain so the
+  - `npm run typecheck` → `node node_modules/@typescript/native/bin/tsc -b --pretty false`
+  - `npm run build` → `node node_modules/@typescript/native/bin/tsc -b && vite build`
+- **Parser compiler — TypeScript 6.0.2**, installed under the standard `typescript` name via the `npm:@typescript/typescript6@6.0.2` alias. It exists _only_ to
+  satisfy the typescript-eslint peer range and exposes the explicit `tsc6` compatibility binary. Its own pass,
+  `npm run typecheck:toolchain` (`node node_modules/typescript/bin/tsc6 -b --pretty false`), is kept in the `quality` chain so the
   code the linter's compiler sees is verified too, rather than merely parsed.
 - `tsconfig.base.json` declares `paths` with **no** `baseUrl`; `@/*` maps to `./src/*` and resolves
-  through `vite-tsconfig-paths` at build and test time.
-- `typescript7` is listed in `knip.json`'s `ignoreDependencies` because nothing imports it by name.
+  through Vite's native `resolve.tsconfigPaths` option at build and test time.
+- Knip discovers both compiler packages from the explicit npm scripts; neither is ignored.
 
 **Removal condition:** the moment typescript-eslint's peer range covers TypeScript 7, this
-arrangement must be deleted — drop the `typescript` 5.x devDependency, point `typescript` at v7,
-remove the `typescript7` alias, and collapse the two typecheck scripts into one.
+arrangement must be deleted — drop the `typescript` 6 compatibility alias, point `typescript` at v7,
+remove the `@typescript/native` alias, and collapse the two typecheck scripts into one.
 
 That condition is watched mechanically, not remembered:
 `node scripts/quality/check-toolchain-compatibility.mjs` reads the alias's major from `package.json`
@@ -51,7 +51,7 @@ in the meantime.
 retirement trigger is executable, so this decision cannot quietly outlive its reason.
 
 **Negative / cost:** Two compilers in `node_modules`, two typecheck passes in `quality`, and a
-genuine footgun: bare `npx tsc` silently runs 5.9.3, not the primary compiler. Any behavior
+genuine footgun: bare `npx tsc` silently runs 6.0.2, not the primary compiler. Any behavior
 difference between the two majors surfaces as a confusing second-pass failure.
 
 **Enforcement:** `npm run typecheck` and `npm run typecheck:toolchain` both run inside
@@ -60,7 +60,7 @@ arrangement is obsolete.
 
 ## Alternatives considered
 
-- TypeScript 5.9.3 only — rejected: gives up the primary compiler's checking speed for a tooling
+- TypeScript 6.0.2 only — rejected: gives up the primary compiler's checking speed for a tooling
   peer range.
 - TypeScript 7 only, with type-aware linting disabled — rejected: `strictTypeChecked` catches whole
   classes of defects that syntax-only rules cannot.

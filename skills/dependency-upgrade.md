@@ -10,7 +10,7 @@
 - [package-ownership.config.mjs](../eslint/package-ownership.config.mjs) — the registry every
   runtime dependency must appear in.
 - [context/dependency-map](../context/dependency-map.md) — what depends on what today.
-- [knip.json](../knip.json) — the dead-code gate's entry points and its `ignoreDependencies` list.
+- [knip.json](../knip.json) — the dead-code gate's entry points and project scope.
 
 ## Preconditions
 
@@ -27,7 +27,7 @@ package.json                          exact versions only
 package-lock.json                     committed, from a real install
 eslint/package-ownership.config.mjs   registry entry for any runtime dependency
 src/packages/<owner>/**               the facade, for an addition
-knip.json                             only when a dependency legitimately has no importer
+knip.json                             only when entry points or analyzed project scope change
 ```
 
 ## Steps
@@ -43,9 +43,9 @@ knip.json                             only when a dependency legitimately has no
    `npm run quality:package-ownership` reads `package.json` and fails with
    `dependency "<name>" has no owner in package-ownership.config.mjs`. Only `react` and `react-dom`
    are exempt (`FOUNDATIONAL_VENDORS`).
-5. **Mind the toolchain split.** `typescript7` (aliased to `typescript@7.0.2`) compiles —
-   `npm run typecheck` and `npm run build` both use `node node_modules/typescript7/bin/tsc`. Plain
-   `typescript` (5.9.3) exists only for the lint parser, checked by `npm run typecheck:toolchain`.
+5. **Mind the toolchain split.** `@typescript/native` (aliased to `typescript@7.0.2`) compiles —
+   `npm run typecheck` and `npm run build` both use `node node_modules/@typescript/native/bin/tsc`. Plain
+   `typescript` (6.0.2) exists only for the lint parser, checked by `npm run typecheck:toolchain`.
    **Run both.** A dependency's types can satisfy one and not the other; that is exactly what ADR
    0011 is about.
 6. **Check the ESLint 10 surface** when touching a lint plugin. `eslint.config.mjs` already pins
@@ -100,10 +100,9 @@ npm run validate:web
 - `npm i <pkg>` and moving on — the caret it writes is a range, and the registry entry is missing;
   two gates fail.
 - `npm audit fix --force` — it silently crosses majors and undoes the pinning.
-- Adding to `knip.json`'s `ignoreDependencies` to silence the dead-code gate — the list is for
-  genuinely importer-less packages (`@capacitor/android`, `typescript7`), not for hiding an unwired
-  one.
-- Upgrading `typescript` and assuming `typecheck` covered it — that script uses `typescript7`.
+- Adding `ignoreDependencies` to silence the dead-code gate — scripts and configuration should
+  make legitimate tool dependencies discoverable; an unwired package should be removed.
+- Upgrading `typescript` and assuming `typecheck` covered it — that script uses `@typescript/native`.
 - Skipping `typecheck:toolchain` because "the build passed" — the lint parser is the other half.
 
 ## Definition of done

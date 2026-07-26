@@ -18,7 +18,7 @@
 | `e2e`                 | Playwright: desktop, mobile emulation, Arabic RTL.                                                                                          |
 | `accessibility`       | axe, WCAG 2.2 AA, light + dark + RTL.                                                                                                       |
 | `visual`              | Screenshot diffs against container-generated Linux baselines.                                                                               |
-| `static-analysis`     | Dead code (knip), cycles (madge), duplication (jscpd).                                                                                      |
+| `static-analysis`     | Dead code (knip), cycles (dependency-cruiser), duplication (jscpd).                                                                         |
 | `architecture-gates`  | Structure, ownership, exports, filenames, locales, docs, agent entrypoints.                                                                 |
 | `security`            | `npm audit` + Trivy (vuln, secret, misconfig).                                                                                              |
 | `capacitor-sync`      | Native tree matches a fresh sync; identity matches.                                                                                         |
@@ -46,7 +46,7 @@ the runner uses**:
 
 ```bash
 docker run --rm -v "$PWD:/w" -w /w -e CI=true \
-  mcr.microsoft.com/playwright:v1.61.1-noble \
+  mcr.microsoft.com/playwright:v1.62.0-noble \
   bash -c 'npm ci && npx playwright test tests/visual --update-snapshots'
 ```
 

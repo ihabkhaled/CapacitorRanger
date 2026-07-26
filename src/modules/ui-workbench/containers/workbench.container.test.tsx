@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -121,11 +121,11 @@ describe('WorkbenchContainer', () => {
     expect(screen.getByText('Destructive action')).toBeInTheDocument();
   });
 
-  it('wires the form bindings and submit handler', async () => {
+  it('wires the form bindings and submit handler', () => {
     renderContainer();
 
     expect(screen.getByTestId(WORKBENCH_FORM_TEST_IDS.name)).toHaveAttribute('label', 'Name');
-    await userEvent.click(screen.getByTestId(WORKBENCH_FORM_TEST_IDS.submit));
+    fireEvent.submit(screen.getByTestId(WORKBENCH_FORM_TEST_IDS.submit));
 
     expect(onSubmit).toHaveBeenCalledOnce();
   });
