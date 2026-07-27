@@ -1,7 +1,4 @@
-import type {
-  ContactScreenView,
-  MarketingScreenView,
-} from '@/modules/marketing/types/marketing.types';
+import type { ContactScreenView, MarketingScreenView } from '@/modules/marketing';
 import type { FormFieldBinding } from '@/packages/forms';
 
 export function buildMarketingView(

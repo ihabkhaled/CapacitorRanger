@@ -49,6 +49,9 @@
     {
       "name": "marketing",
       "publicSurface": [
+        "ContactScreenView",
+        "MARKETING_PAGE_KIND",
+        "MarketingScreenView",
         "aboutPath",
         "contactPath",
         "faqPath",
