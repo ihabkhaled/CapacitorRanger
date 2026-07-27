@@ -2,6 +2,8 @@ import { act, renderHook, waitFor } from '@testing-library/react';
 import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { changeAppLocale, getActiveLocale } from '@/packages/i18n';
+import type * as RouterModule from '@/packages/router';
+import { useAppNavigation } from '@/packages/router';
 import type * as PlatformModule from '@/platform';
 import { getDeviceInformation, getExecutionContext, useNetworkStatus } from '@/platform';
 import { API_MODE, APP_LOCALE, THEME_MODE } from '@/shared/enums';
@@ -16,6 +18,13 @@ vi.mock('@/platform', async (importOriginal) => ({
   getExecutionContext: vi.fn(),
   useNetworkStatus: vi.fn(),
 }));
+
+vi.mock('@/packages/router', async (importOriginal) => ({
+  ...(await importOriginal<typeof RouterModule>()),
+  useAppNavigation: vi.fn(),
+}));
+
+const replaceRoute = vi.fn();
 
 function mockPlatform(
   options: {
@@ -57,6 +66,13 @@ beforeAll(async () => {
 beforeEach(() => {
   localStorage.clear();
   useSettingsStore.setState({ theme: THEME_MODE.System, locale: APP_LOCALE.English });
+  vi.mocked(useAppNavigation).mockReturnValue({
+    currentPath: '/en/settings',
+    currentUrl: '/en/settings?panel=appearance#language',
+    push: vi.fn(),
+    replace: replaceRoute,
+    goBack: vi.fn(),
+  });
   mockPlatform();
 });
 
@@ -129,6 +145,16 @@ describe('useSettingsScreen', () => {
     await waitFor(() => {
       expect(getActiveLocale()).toBe(APP_LOCALE.Arabic);
     });
+  });
+
+  it('keeps the current page while replacing its locale URL segment', () => {
+    const { result } = renderHook(() => useSettingsScreen());
+
+    act(() => {
+      result.current.onLocaleChange(APP_LOCALE.Arabic);
+    });
+
+    expect(replaceRoute).toHaveBeenCalledExactlyOnceWith('/ar/settings?panel=appearance#language');
   });
 
   it('re-translates its own labels after the locale changes', async () => {

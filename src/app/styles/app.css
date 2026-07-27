@@ -936,7 +936,8 @@ body {
     display: grid;
   }
 
-  .site-shell-body {
+  .site-shell-body,
+  .site-shell-body[data-layout='product'] {
     display: block;
   }
 

@@ -1,6 +1,8 @@
 import { expect, type Page } from '@playwright/test';
 
-import { TEST_IDS } from '@/shared/config';
+import { APP_PATHS, TEST_IDS } from '@/shared/config';
+import { APP_LOCALE } from '@/shared/enums';
+import { localizedPath } from '@/shared/helpers/localized-path.helper';
 import { MOCK_CREDENTIALS } from '@/tests/msw/mock-data.constants';
 
 /**
@@ -8,12 +10,13 @@ import { MOCK_CREDENTIALS } from '@/tests/msw/mock-data.constants';
  * test id fails typecheck instead of silently skipping assertions.
  */
 export const APP_ROUTES = {
-  root: '/',
-  welcome: '/welcome',
-  login: '/login',
-  home: '/home',
-  settings: '/settings',
-  workbench: '/workbench',
+  root: APP_PATHS.root,
+  welcome: localizedPath(APP_PATHS.welcome, APP_LOCALE.English),
+  login: localizedPath(APP_PATHS.login, APP_LOCALE.English),
+  arabicLogin: localizedPath(APP_PATHS.login, APP_LOCALE.Arabic),
+  home: localizedPath(APP_PATHS.home, APP_LOCALE.English),
+  settings: localizedPath(APP_PATHS.settings, APP_LOCALE.English),
+  workbench: localizedPath(APP_PATHS.workbench, APP_LOCALE.English),
 } as const;
 
 /** Wait for the app shell: MSW + i18n + session bootstrap have all settled. */

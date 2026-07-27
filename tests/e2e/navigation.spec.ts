@@ -8,8 +8,8 @@ test.describe('public navigation', () => {
   test('redirects the root path to the welcome screen', async ({ page }) => {
     await gotoApp(page, APP_ROUTES.root);
 
-    await expect(page.getByTestId(TEST_IDS.welcomePage)).toBeVisible();
-    await expect(page).toHaveURL(/\/welcome$/u);
+    await expectPresentedPage(page, TEST_IDS.welcomePage);
+    await expect(page).toHaveURL(/\/en$/u);
   });
 
   test('moves from welcome to login through the call to action', async ({ page }) => {
@@ -18,7 +18,7 @@ test.describe('public navigation', () => {
     await page.getByTestId(TEST_IDS.welcomeLoginCta).click();
 
     await expectPresentedPage(page, TEST_IDS.loginPage);
-    await expect(page).toHaveURL(/\/login$/u);
+    await expect(page).toHaveURL(/\/en\/login$/u);
   });
 
   test('serves settings and the workbench without a session', async ({ page }) => {
@@ -30,11 +30,11 @@ test.describe('public navigation', () => {
   });
 
   test('renders the not-found screen for an unknown route', async ({ page }) => {
-    await gotoApp(page, '/this-route-does-not-exist');
+    await gotoApp(page, '/en/this-route-does-not-exist');
 
     await expect(page.getByTestId(TEST_IDS.notFoundPage)).toBeVisible();
     await page.getByTestId(TEST_IDS.notFoundHomeLink).click();
-    await expect(page).toHaveURL(/\/welcome$/u);
+    await expect(page).toHaveURL(/\/en$/u);
     await expectPresentedPage(page, TEST_IDS.welcomePage);
   });
 
@@ -42,6 +42,6 @@ test.describe('public navigation', () => {
     await gotoApp(page, APP_ROUTES.home);
 
     await expect(page.getByTestId(TEST_IDS.loginPage)).toBeVisible();
-    await expect(page).toHaveURL(/\/login$/u);
+    await expect(page).toHaveURL(/\/en\/login$/u);
   });
 });

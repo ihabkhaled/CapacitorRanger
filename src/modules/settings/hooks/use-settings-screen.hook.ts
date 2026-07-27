@@ -1,6 +1,8 @@
 import { changeAppLocale, useAppTranslation } from '@/packages/i18n';
+import { useAppNavigation } from '@/packages/router';
 import { getExecutionContext, useNetworkStatus } from '@/platform';
 import { API_MODE, APP_LOCALE, THEME_MODE, type AppLocale, type ThemeMode } from '@/shared/enums';
+import { replacePathLocale } from '@/shared/helpers/localized-path.helper';
 import { I18N_KEYS } from '@/shared/i18n';
 
 import { useSettingsStore } from '../store/settings.store';
@@ -39,6 +41,7 @@ export function useSettingsScreen(): SettingsScreenView {
   const locale = useSettingsStore((state) => state.locale);
   const setTheme = useSettingsStore((state) => state.setTheme);
   const setLocale = useSettingsStore((state) => state.setLocale);
+  const navigation = useAppNavigation();
   const network = useNetworkStatus();
   const runtime = useRuntimeInfo();
   const executionContext = getExecutionContext();
@@ -61,6 +64,7 @@ export function useSettingsScreen(): SettingsScreenView {
     locale,
     onLocaleChange: (nextLocale) => {
       setLocale(nextLocale);
+      navigation.replace(replacePathLocale(navigation.currentUrl, nextLocale));
       void changeAppLocale(nextLocale);
     },
     connectivityLabel: t(I18N_KEYS.settings.connectivity),

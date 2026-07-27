@@ -65,7 +65,7 @@ test.describe('settings', () => {
       .click();
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');
 
-    await gotoApp(page, APP_ROUTES.login);
+    await gotoApp(page, APP_ROUTES.arabicLogin);
 
     await expect(page.getByTestId(TEST_IDS.loginPage)).toContainText('تسجيل الدخول');
     await expect(page.locator('html')).toHaveAttribute('dir', 'rtl');

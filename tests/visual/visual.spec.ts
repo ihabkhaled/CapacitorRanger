@@ -2,13 +2,13 @@ import { expect, test } from '@playwright/test';
 
 import { TEST_IDS } from '@/shared/config';
 
-import { APP_ROUTES, gotoApp } from '../e2e/fixtures/app.fixture';
+import { APP_ROUTES, expectPresentedPage, gotoApp } from '../e2e/fixtures/app.fixture';
 
 /** Deterministic screenshots: animations disabled by the config expectation. */
 test.describe('visual regression', () => {
   test('welcome screen (light)', async ({ page }) => {
     await gotoApp(page, APP_ROUTES.welcome);
-    await expect(page.getByTestId(TEST_IDS.welcomePage)).toBeVisible();
+    await expectPresentedPage(page, TEST_IDS.welcomePage);
     await expect(page).toHaveScreenshot('welcome-light.png', { fullPage: true });
   });
 
