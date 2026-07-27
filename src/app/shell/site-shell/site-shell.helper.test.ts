@@ -37,6 +37,22 @@ describe('isProductSidebarPath', () => {
       isContentInert: true,
       showsProductSidebar: false,
     });
+    expect(buildSiteShellLayout('/en/home', APP_LOCALE.English, false, false)).toEqual({
+      layout: 'product',
+      rendersSidebar: true,
+      showsDrawerScrim: false,
+      isSidebarHidden: false,
+      isContentInert: false,
+      showsProductSidebar: true,
+    });
+    expect(buildSiteShellLayout('/en/home', APP_LOCALE.English, true, false)).toEqual({
+      layout: 'product',
+      rendersSidebar: true,
+      showsDrawerScrim: false,
+      isSidebarHidden: true,
+      isContentInert: false,
+      showsProductSidebar: true,
+    });
   });
 
   it('builds localized navigation and compact breadcrumbs outside the screen hook', () => {
@@ -57,5 +73,12 @@ describe('isProductSidebarPath', () => {
       { path: '/ar', label: 'الرئيسية', isCurrent: false },
       { path: '/ar/about', label: 'عن القالب', isCurrent: true },
     ]);
+    expect(buildSiteBreadcrumbs('/ar/unknown', links, [])).toEqual([
+      { path: '/ar', label: 'الرئيسية', isCurrent: true },
+    ]);
+    expect(buildSiteBreadcrumbs('/ar', links, [])).toEqual([
+      { path: '/ar', label: 'الرئيسية', isCurrent: true },
+    ]);
+    expect(buildSiteBreadcrumbs('/ar', [], [])).toEqual([]);
   });
 });

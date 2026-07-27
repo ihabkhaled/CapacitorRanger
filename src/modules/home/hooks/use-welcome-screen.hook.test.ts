@@ -56,4 +56,14 @@ describe('useWelcomeScreen', () => {
 
     expect(result.current.navigation.currentPath).toBe('/en');
   });
+
+  it('navigates to the localized feature overview', () => {
+    const { result } = renderWelcome();
+
+    act(() => {
+      result.current.screen.onFeaturesClick();
+    });
+
+    expect(result.current.navigation.currentPath).toBe('/en/features');
+  });
 });

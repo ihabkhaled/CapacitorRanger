@@ -55,6 +55,17 @@ describe('useRouteGuard', () => {
     expect(result.current.isLocaleSupported).toBe(false);
   });
 
+  it('rejects a path with no locale segment', () => {
+    mockSession(SESSION_STATUS.Anonymous);
+    mockNavigation('');
+
+    const { result } = renderHook(() => useRouteGuard());
+
+    expect(result.current.isLocaleSupported).toBe(false);
+    expect(result.current.loginPath).toBe('/en/login');
+    expect(result.current.homePath).toBe('/en/home');
+  });
+
   it('holds routing until the session resolves', () => {
     mockSession(SESSION_STATUS.Unknown);
     mockNavigation();

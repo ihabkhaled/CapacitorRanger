@@ -16,6 +16,7 @@ describe('localized path helpers', () => {
     expect(localeFromPath('/fa/features')).toBe(APP_LOCALE.Persian);
     expect(localeFromPath('/unknown/features')).toBe(APP_LOCALE.English);
     expect(localeFromPath('/')).toBe(APP_LOCALE.English);
+    expect(localeFromPath('')).toBe(APP_LOCALE.English);
   });
 
   it('builds concrete localized paths from route patterns', () => {
@@ -26,5 +27,6 @@ describe('localized path helpers', () => {
   it('preserves the current route while replacing its locale', () => {
     expect(replacePathLocale('/ar/workbench', APP_LOCALE.Japanese)).toBe('/ja/workbench');
     expect(replacePathLocale('/not-localized', APP_LOCALE.German)).toBe('/de');
+    expect(replacePathLocale('', APP_LOCALE.German)).toBe('/de');
   });
 });

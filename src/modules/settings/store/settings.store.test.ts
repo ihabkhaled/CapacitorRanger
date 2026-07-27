@@ -200,6 +200,15 @@ describe('useSettingsStore', () => {
       expect(store.getInitialState().locale).toBe(APP_LOCALE.Arabic);
     });
 
+    it('falls back to English when the configured locale is not bundled', async () => {
+      const store = await importStoreWithEnv({
+        VITE_DEFAULT_LOCALE: 'xx',
+        VITE_SUPPORTED_LOCALES: 'xx,en',
+      });
+
+      expect(store.getInitialState().locale).toBe(APP_LOCALE.English);
+    });
+
     it('migrates a newer payload onto the environment defaults, not hardcoded ones', async () => {
       seedPersisted({ theme: THEME_MODE.System, locale: APP_LOCALE.English }, 99);
 

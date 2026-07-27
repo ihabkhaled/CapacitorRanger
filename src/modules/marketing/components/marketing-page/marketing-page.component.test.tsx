@@ -39,4 +39,19 @@ describe('MarketingPage', () => {
       expect(screen.queryByRole('group')).not.toBeInTheDocument();
     },
   );
+
+  it('renders the optional contact call to action', () => {
+    render(
+      <MarketingPage
+        {...props(MARKETING_PAGE_KIND.Contact)}
+        contactHref="mailto:hello@example.com"
+        contactLabel="Start a conversation"
+      />,
+    );
+
+    expect(screen.getByText('Start a conversation')).toHaveAttribute(
+      'href',
+      'mailto:hello@example.com',
+    );
+  });
 });

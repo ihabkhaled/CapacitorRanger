@@ -1,12 +1,18 @@
 import { IonNote } from '@/packages/ionic';
 import { AppButton, AppCard, AppInput, AppTextarea } from '@/shared/ui';
 
+import { CONTACT_FORM_TEST_IDS } from './contact-form.constants';
 import type { ContactFormProps } from './contact-form.types';
 
 export function ContactForm(props: ContactFormProps): React.JSX.Element {
   return (
     <AppCard tone="accent">
-      <form className="app-contact-form" onSubmit={props.onSubmit} noValidate>
+      <form
+        className="app-contact-form"
+        data-testid={CONTACT_FORM_TEST_IDS.form}
+        onSubmit={props.onSubmit}
+        noValidate
+      >
         <h2>{props.title}</h2>
         <AppInput
           label={props.nameLabel}
@@ -16,6 +22,7 @@ export function ContactForm(props: ContactFormProps): React.JSX.Element {
           onBlur={props.name.onBlur}
           errorMessage={props.name.errorMessage}
           autocomplete="name"
+          testId={CONTACT_FORM_TEST_IDS.name}
         />
         <AppInput
           label={props.emailLabel}
@@ -26,6 +33,7 @@ export function ContactForm(props: ContactFormProps): React.JSX.Element {
           errorMessage={props.email.errorMessage}
           type="email"
           autocomplete="email"
+          testId={CONTACT_FORM_TEST_IDS.email}
         />
         <AppTextarea
           label={props.messageLabel}
@@ -34,6 +42,7 @@ export function ContactForm(props: ContactFormProps): React.JSX.Element {
           onValueChange={props.message.onChange}
           onBlur={props.message.onBlur}
           errorMessage={props.message.errorMessage}
+          testId={CONTACT_FORM_TEST_IDS.message}
         />
         <AppButton label={props.submitLabel} type="submit" />
         {props.readyMessage === undefined ? null : (
