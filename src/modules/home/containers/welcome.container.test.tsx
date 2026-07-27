@@ -44,10 +44,11 @@ describe('WelcomeContainer', () => {
     expect(screen.getByTestId(TEST_IDS.welcomePage)).toBeInTheDocument();
   });
 
-  it('titles both the toolbar and the view from the screen hook', () => {
+  it('uses one page heading without a duplicate product toolbar title', () => {
     render(<WelcomeContainer />);
 
-    expect(getIonTitle()).toHaveTextContent('Build the product, not the foundation');
+    expect(getIonTitle()).not.toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent(
       'Build the product, not the foundation',
     );
