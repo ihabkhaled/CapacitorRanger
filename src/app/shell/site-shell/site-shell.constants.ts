@@ -17,6 +17,12 @@ export const SITE_PRODUCT_LINKS = [
   { path: APP_PATHS.workbench, labelKey: I18N_KEYS.navigation.workbench },
 ] as const;
 
+export const SITE_PRODUCT_SIDEBAR_PATHS = [
+  APP_PATHS.home,
+  APP_PATHS.settings,
+  APP_PATHS.workbench,
+] as const;
+
 export const SITE_LOCALE_CHOICES = [
   { value: APP_LOCALE.English, labelKey: I18N_KEYS.languages.en },
   { value: APP_LOCALE.Arabic, labelKey: I18N_KEYS.languages.ar },

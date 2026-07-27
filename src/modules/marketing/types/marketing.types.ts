@@ -9,7 +9,7 @@ export const MARKETING_PAGE_KIND = {
 
 export type MarketingPageKind = (typeof MARKETING_PAGE_KIND)[keyof typeof MARKETING_PAGE_KIND];
 
-export interface MarketingSectionView {
+interface MarketingSectionView {
   readonly title: string;
   readonly body: string;
 }

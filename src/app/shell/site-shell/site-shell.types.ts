@@ -1,4 +1,6 @@
+import type { AppPath } from '@/shared/config';
 import type { AppLocale, ThemeMode } from '@/shared/enums';
+import type { I18nKey } from '@/shared/i18n';
 import type {
   LocaleChoiceView,
   SiteBreadcrumbView,
@@ -6,8 +8,27 @@ import type {
   ThemeChoiceView,
 } from '@/shared/ui';
 
-export interface SiteShellView {
+type SiteShellLayout = 'marketing' | 'product';
+
+export interface SiteLinkDefinition {
+  readonly path: AppPath;
+  readonly labelKey: I18nKey;
+}
+
+export type TranslateSiteLabel = (key: I18nKey) => string;
+
+export interface SiteShellLayoutView {
+  readonly layout: SiteShellLayout;
+  readonly rendersSidebar: boolean;
+  readonly showsDrawerScrim: boolean;
+  readonly isSidebarHidden: boolean;
+  readonly isContentInert: boolean;
+  readonly showsProductSidebar: boolean;
+}
+
+export interface SiteShellView extends SiteShellLayoutView {
   readonly brandLabel: string;
+  readonly brandPath: string;
   readonly navigationLabel: string;
   readonly menuLabel: string;
   readonly breadcrumbsLabel: string;

@@ -9,6 +9,7 @@ import { SiteShell } from './site-shell.component';
 const CLOSE = vi.fn();
 const PROPS = {
   brandLabel: 'Capacitor Ranger',
+  brandPath: '/en',
   navigationLabel: 'Navigation',
   menuLabel: 'Close menu',
   breadcrumbsLabel: 'Breadcrumbs',
@@ -28,6 +29,12 @@ const PROPS = {
   theme: THEME_MODE.System,
   isMenuOpen: true,
   isCompactViewport: true,
+  layout: 'marketing' as const,
+  rendersSidebar: true,
+  showsDrawerScrim: true,
+  isSidebarHidden: false,
+  isContentInert: true,
+  showsProductSidebar: false,
   onMenuToggle: vi.fn(),
   onMenuClose: CLOSE,
   onNavigate: vi.fn(),
@@ -57,5 +64,24 @@ describe('SiteShell', () => {
     await user.keyboard('{Escape}');
 
     expect(CLOSE).toHaveBeenCalledTimes(2);
+  });
+
+  it('keeps persistent product navigation out of public desktop pages', () => {
+    render(
+      <SiteShell
+        {...PROPS}
+        isCompactViewport={false}
+        isMenuOpen={false}
+        rendersSidebar={false}
+        showsDrawerScrim={false}
+        isContentInert={false}
+        showsProductSidebar={false}
+      >
+        Marketing page
+      </SiteShell>,
+    );
+
+    expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
+    expect(screen.getByText('Marketing page')).toBeVisible();
   });
 });

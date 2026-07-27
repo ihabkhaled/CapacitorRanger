@@ -34,7 +34,7 @@ export function SiteShell(props: SiteShellProps): React.JSX.Element {
     <div className="site-shell">
       <AppNavbar
         brandLabel={props.brandLabel}
-        brandPath={props.primaryLinks[0]?.path ?? props.currentPath}
+        brandPath={props.brandPath}
         navigationLabel={props.navigationLabel}
         menuLabel={props.menuLabel}
         items={props.primaryLinks}
@@ -47,8 +47,8 @@ export function SiteShell(props: SiteShellProps): React.JSX.Element {
         menuTestId={TEST_IDS.mobileNavigationToggle}
         actions={controls}
       />
-      <div className="site-shell-body">
-        {props.isCompactViewport && props.isMenuOpen ? (
+      <div className="site-shell-body" data-layout={props.layout}>
+        {props.showsDrawerScrim ? (
           <button
             className="site-drawer-scrim"
             type="button"
@@ -57,22 +57,24 @@ export function SiteShell(props: SiteShellProps): React.JSX.Element {
             onClick={props.onMenuClose}
           />
         ) : null}
-        <AppSidebar
-          label={props.navigationLabel}
-          items={[...props.primaryLinks, ...props.productLinks]}
-          currentPath={props.currentPath}
-          isOpen={props.isMenuOpen}
-          isHidden={props.isCompactViewport && !props.isMenuOpen}
-          isModal={props.isCompactViewport}
-          id={SITE_SIDEBAR_ID}
-          closeLabel={props.menuLabel}
-          controls={controls}
-          onClose={props.onMenuClose}
-          onNavigate={props.onNavigate}
-        />
+        {props.rendersSidebar ? (
+          <AppSidebar
+            label={props.navigationLabel}
+            items={[...props.primaryLinks, ...props.productLinks]}
+            currentPath={props.currentPath}
+            isOpen={props.isMenuOpen}
+            isHidden={props.isSidebarHidden}
+            isModal={props.isCompactViewport}
+            id={SITE_SIDEBAR_ID}
+            closeLabel={props.menuLabel}
+            controls={controls}
+            onClose={props.onMenuClose}
+            onNavigate={props.onNavigate}
+          />
+        ) : null}
         <div
           className="site-shell-content"
-          inert={props.isCompactViewport && props.isMenuOpen ? true : undefined}
+          inert={props.isContentInert}
           data-testid={TEST_IDS.siteShellContent}
         >
           <AppBreadcrumbs

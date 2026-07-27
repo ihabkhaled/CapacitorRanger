@@ -94,4 +94,16 @@ describe('PageShell', () => {
 
     expect(screen.queryByTestId('page-banner')).not.toBeInTheDocument();
   });
+
+  it('lets public marketing pages rely on the global shell without a duplicate toolbar', () => {
+    render(
+      <PageShell title="Features" presentation="marketing">
+        <h1>Features</h1>
+      </PageShell>,
+    );
+
+    expect(getIonTitle()).not.toBeInTheDocument();
+    expect(getIonContent()).toHaveAttribute('data-presentation', 'marketing');
+    expect(screen.getByRole('heading', { name: 'Features' })).toBeVisible();
+  });
 });

@@ -1,6 +1,6 @@
 import { readFile } from 'node:fs/promises';
 
-import { chromium } from 'playwright';
+import { chromium } from '@playwright/test';
 
 const icons = [
   { source: 'public/pwa-192.svg', output: 'public/pwa-192.png', size: 192 },

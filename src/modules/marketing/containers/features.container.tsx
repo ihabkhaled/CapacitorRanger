@@ -8,7 +8,7 @@ import { MARKETING_PAGE_KIND } from '../types/marketing.types';
 export function FeaturesContainer(): React.JSX.Element {
   const screen = useMarketingScreen(MARKETING_PAGE_KIND.Features);
   return (
-    <PageShell title={screen.title} testId={TEST_IDS.featuresPage}>
+    <PageShell title={screen.title} presentation="marketing" testId={TEST_IDS.featuresPage}>
       <MarketingPage {...screen} />
     </PageShell>
   );

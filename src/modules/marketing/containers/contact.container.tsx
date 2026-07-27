@@ -7,7 +7,11 @@ import { useContactScreen } from '../hooks/use-contact-screen.hook';
 export function ContactContainer(): React.JSX.Element {
   const screen = useContactScreen();
   return (
-    <PageShell title={screen.marketing.title} testId={TEST_IDS.contactPage}>
+    <PageShell
+      title={screen.marketing.title}
+      presentation="marketing"
+      testId={TEST_IDS.contactPage}
+    >
       <ContactPage {...screen} />
     </PageShell>
   );

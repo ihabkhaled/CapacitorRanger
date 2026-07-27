@@ -20,6 +20,11 @@ import {
 } from './site-shell.constants';
 import type { SiteShellView } from './site-shell.types';
 import { useCloseMenuOnEscape } from './use-close-menu-on-escape.hook';
+import {
+  buildLocalizedSiteLinks,
+  buildSiteBreadcrumbs,
+  buildSiteShellLayout,
+} from './site-shell.helper';
 
 export function useSiteShell(): SiteShellView {
   const { t } = useAppTranslation();
@@ -29,36 +34,22 @@ export function useSiteShell(): SiteShellView {
   const locale = localeFromPath(navigation.currentPath);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const isCompactViewport = useCompactViewport();
+  const layout = buildSiteShellLayout(
+    navigation.currentPath,
+    locale,
+    isCompactViewport,
+    isMenuOpen,
+  );
   const primaryLinks = useMemo(
-    () =>
-      SITE_PRIMARY_LINKS.map((item) => ({
-        label: t(item.labelKey),
-        path: localizedPath(item.path, locale),
-      })),
+    () => buildLocalizedSiteLinks(SITE_PRIMARY_LINKS, locale, t),
     [locale, t],
   );
   const productLinks = useMemo(
-    () =>
-      SITE_PRODUCT_LINKS.map((item) => ({
-        label: t(item.labelKey),
-        path: localizedPath(item.path, locale),
-      })),
+    () => buildLocalizedSiteLinks(SITE_PRODUCT_LINKS, locale, t),
     [locale, t],
   );
-  const welcomeLink = {
-    label: t(SITE_PRIMARY_LINKS[0].labelKey),
-    path: localizedPath(SITE_PRIMARY_LINKS[0].path, locale),
-  };
-  const currentLink =
-    [...primaryLinks, ...productLinks].find((item) => item.path === navigation.currentPath) ??
-    welcomeLink;
-  const breadcrumbs =
-    currentLink.path === welcomeLink.path
-      ? [{ ...currentLink, isCurrent: true }]
-      : [
-          { ...welcomeLink, isCurrent: false },
-          { ...currentLink, isCurrent: true },
-        ];
+  const brandPath = localizedPath(SITE_PRIMARY_LINKS[0].path, locale);
+  const breadcrumbs = buildSiteBreadcrumbs(navigation.currentPath, primaryLinks, productLinks);
   useEffect(() => {
     setLocale(locale);
     applyDocumentLocale(locale, localeToDirection(locale));
@@ -69,6 +60,7 @@ export function useSiteShell(): SiteShellView {
   });
   return {
     brandLabel: APP_IDENTITY.appName,
+    brandPath,
     navigationLabel: t(I18N_KEYS.shell.navigationLabel),
     menuLabel: t(isMenuOpen ? I18N_KEYS.shell.menuClose : I18N_KEYS.shell.menuOpen),
     breadcrumbsLabel: t(I18N_KEYS.shell.breadcrumbsLabel),
@@ -94,6 +86,7 @@ export function useSiteShell(): SiteShellView {
     theme: appearance.theme,
     isMenuOpen,
     isCompactViewport,
+    ...layout,
     onMenuToggle: () => {
       setIsMenuOpen((open) => !open);
     },

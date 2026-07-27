@@ -7,7 +7,7 @@ import { useWelcomeScreen } from '../hooks/use-welcome-screen.hook';
 export function WelcomeContainer(): React.JSX.Element {
   const screen = useWelcomeScreen();
   return (
-    <PageShell title={screen.title} testId={TEST_IDS.welcomePage}>
+    <PageShell title={screen.title} presentation="marketing" testId={TEST_IDS.welcomePage}>
       <WelcomeView
         title={screen.title}
         subtitle={screen.subtitle}
