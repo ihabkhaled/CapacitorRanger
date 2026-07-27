@@ -42,16 +42,29 @@
         "getHomeRouteDefinitions",
         "getNotFoundRouteDefinition",
         "homePath",
+        "offlinePath",
         "welcomePath"
+      ]
+    },
+    {
+      "name": "marketing",
+      "publicSurface": [
+        "aboutPath",
+        "contactPath",
+        "faqPath",
+        "featuresPath",
+        "getMarketingRouteDefinitions"
       ]
     },
     {
       "name": "settings",
       "publicSurface": [
+        "AppearanceController",
         "AppearancePreferences",
         "getSettingsRouteDefinitions",
         "selectIsDarkTheme",
         "settingsPath",
+        "useAppearanceController",
         "useAppearancePreferences"
       ]
     },

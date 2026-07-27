@@ -1,11 +1,8 @@
 import type { ThemeMode } from '@/shared/enums';
 
+import type { ChoiceSwitcherProps } from '../choice-switcher';
 import type { ThemeChoiceView } from '../site-shell/site-shell.types';
 
-export interface ThemeSwitcherProps {
-  readonly label: string;
-  readonly value: ThemeMode;
+export type ThemeSwitcherProps = Omit<ChoiceSwitcherProps<ThemeMode>, 'choices'> & {
   readonly choices: readonly ThemeChoiceView[];
-  readonly onChange: (value: ThemeMode) => void;
-  readonly testId?: string;
-}
+};

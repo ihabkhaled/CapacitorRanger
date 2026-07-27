@@ -2,6 +2,11 @@ export { useConfirmAlert, type ConfirmAlertApi, type ShowConfirmAlertOptions } f
 export { AppBreadcrumbs, type AppBreadcrumbsProps } from './breadcrumbs';
 export { AppButton, type AppButtonProps, type AppButtonTone } from './button';
 export { AppCard, type AppCardProps, type AppCardTone } from './card';
+export {
+  ChoiceSwitcher,
+  type ChoiceSwitcherOption,
+  type ChoiceSwitcherProps,
+} from './choice-switcher';
 export { EmptyState, type EmptyStateProps } from './empty-state';
 export { ErrorState, type ErrorStateProps } from './error-state';
 export { FormField, type FormFieldProps } from './form-field';

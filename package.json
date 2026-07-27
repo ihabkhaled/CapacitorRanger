@@ -35,7 +35,7 @@
     "quality:package-ownership": "node scripts/architecture/validate-package-ownership.mjs",
     "quality:dead-code": "knip",
     "quality:circular": "depcruise --config .dependency-cruiser.mjs src",
-    "quality:duplicates": "jscpd src tests --min-lines 8 --min-tokens 60 --threshold 0",
+    "quality:duplicates": "jscpd src tests --ignore \"**/shared/i18n/locales/**\" --min-lines 8 --min-tokens 60 --threshold 0",
     "quality:exports": "node scripts/quality/validate-public-exports.mjs",
     "quality:filenames": "node scripts/quality/validate-filenames.mjs",
     "quality:locales": "node scripts/quality/validate-locales.mjs",

@@ -8,20 +8,9 @@ import {
   WELCOME_RELEASE_TARGETS,
   WELCOME_TRUST_BRANDS,
 } from '../components/welcome-view/welcome-view.constants';
+import type { WelcomeViewProps } from '../components/welcome-view/welcome-view.types';
 
-export interface WelcomeScreenView {
-  readonly title: string;
-  readonly subtitle: string;
-  readonly eyebrow: string;
-  readonly loginCta: string;
-  readonly featuresCta: string;
-  readonly trustLabel: string;
-  readonly trustIntro: string;
-  readonly trustBrands: readonly string[];
-  readonly releaseTargets: readonly string[];
-  readonly onLoginClick: () => void;
-  readonly onFeaturesClick: () => void;
-}
+export type WelcomeScreenView = WelcomeViewProps;
 
 export function useWelcomeScreen(): WelcomeScreenView {
   const { t } = useAppTranslation();
